@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-brand-50: #E3F2FD;
+  --color-brand-100: #BBDEFB;
+  --color-brand-200: #90CAF9;
+  --color-brand-300: #64B5F6;
+  --color-brand-400: #42A5F5;
+  --color-brand-500: #1565C0;
+  --color-brand-600: #1E88E5;
+  --color-brand-700: #1976D2;
+  --color-brand-800: #1565C0;
+  --color-brand-900: #0D47A1;
+  --color-navy: #0D1B2A;
+  --color-success: #16A34A;
+  --color-warning: #D97706;
+  --color-danger: #DC2626;
+  --color-background: #F0F4F8;
+  --font-sans: system-ui, sans-serif;
+}
+
+body {
+  background: #F5F7FF;
+  color: #0F172A;
+}
+
+html { scroll-behavior: smooth; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #F3F4F6; }
+::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+
+* {
+  transition-property: color, background-color, border-color, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
+
+*:focus { outline: none; }
+*:focus-visible { outline: 2px solid #1565C0; outline-offset: 2px; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; }
+  .print-break { page-break-before: always; }
+}
