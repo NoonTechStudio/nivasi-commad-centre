@@ -35,16 +35,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const sendOtp = async (phone: string) => {
-    await api.post('/auth/send-otp', { phone });
+    const cleanPhone = phone.trim().replace(/[^0-9]/g, '');
+    await api.post('/auth/send-otp', { phone: cleanPhone });
   };
 
   const verifyOtp = async (phone: string, otp: string) => {
-    console.log('=== VERIFY OTP DEBUG ===');
-    console.log('phone:', JSON.stringify(phone));
-    console.log('otp:', JSON.stringify(otp));
-    console.log('phone type:', typeof phone);
-    console.log('otp type:', typeof otp);
-    console.log('otp length:', otp.length);
+    const cleanPhone = phone.trim().replace(/[^0-9]/g, '');
 
     let device_id = localStorage.getItem('nivasi_device_id');
     if (!device_id) {
@@ -52,11 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('nivasi_device_id', device_id);
     }
 
-    const payload = { phone, otp, device_id };
-    console.log('payload:', JSON.stringify(payload));
-
-    const res = await api.post('/auth/verify-otp', payload);
-    console.log('response:', res.data);
+    const res = await api.post('/auth/verify-otp', { phone: cleanPhone, otp, device_id });
 
     const { token, user: userData } = res.data.data;
     if (!['SUPER_ADMIN', 'WING_ADMIN'].includes(userData.role)) {
