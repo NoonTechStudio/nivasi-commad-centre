@@ -1,21 +1,46 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { toast } from 'sonner';
+
+function isColdStartError(err: unknown): boolean {
+  const e = err as { response?: { status?: number }; message?: string; code?: string };
+  return (
+    !e.response ||
+    e.response.status === 502 ||
+    e.response.status === 503 ||
+    e.code === 'ERR_NETWORK' ||
+    e.message === 'Network Error'
+  );
+}
 
 export default function LoginPage() {
   const [phone, setPhone] = useState('');
   const [showOtp, setShowOtp] = useState(false);
   const [otpValue, setOtpValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const [connectingMsg, setConnectingMsg] = useState(false);
   const [error, setError] = useState('');
   const { sendOtp, verifyOtp, user } = useAuth();
   const router = useRouter();
+  const connectingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (user) router.replace('/dashboard');
   }, [user, router]);
+
+  useEffect(() => {
+    if (loading) {
+      connectingTimer.current = setTimeout(() => setConnectingMsg(true), 4000);
+    } else {
+      if (connectingTimer.current) clearTimeout(connectingTimer.current);
+      setConnectingMsg(false);
+    }
+    return () => {
+      if (connectingTimer.current) clearTimeout(connectingTimer.current);
+    };
+  }, [loading]);
 
   const handleSendOtp = async () => {
     setError('');
@@ -30,8 +55,12 @@ export default function LoginPage() {
       setPhone(cleanPhone);
       setShowOtp(true);
       toast.success('OTP sent successfully');
-    } catch {
-      setError('Failed to send OTP. Check the phone number and try again.');
+    } catch (err: unknown) {
+      if (isColdStartError(err)) {
+        setError('Server is starting up, please wait...');
+      } else {
+        setError('Failed to send OTP. Check the phone number and try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -56,8 +85,12 @@ export default function LoginPage() {
       }, 300);
     } catch (err: unknown) {
       console.error('Verify error:', err);
-      const e = err as { response?: { data?: { message?: string } }; message?: string };
-      setError(e.response?.data?.message || e.message || 'Invalid OTP');
+      if (isColdStartError(err)) {
+        setError('Server is starting up, please wait...');
+      } else {
+        const e = err as { response?: { data?: { message?: string } }; message?: string };
+        setError(e.response?.data?.message || e.message || 'Invalid OTP');
+      }
     } finally {
       setLoading(false);
     }
@@ -129,6 +162,14 @@ export default function LoginPage() {
             Welcome back
           </h2>
           <p className="text-sm text-gray-500 mb-8">Sign in to your admin account</p>
+
+          {connectingMsg && (
+            <div className="mb-4 p-3 rounded-xl bg-blue-50 border border-blue-100">
+              <p className="text-sm text-blue-600">
+                🔄 Connecting to server... (this may take 30 seconds on first load)
+              </p>
+            </div>
+          )}
 
           {!showOtp ? (
             <>
