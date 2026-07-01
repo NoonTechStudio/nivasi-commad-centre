@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Home, Users, UserCheck, Plus, X } from 'lucide-react';
+import { ArrowLeft, Home, Users, UserCheck, Plus, X, Phone } from 'lucide-react';
 import api from '@/lib/api';
 
 interface FlatUser {
@@ -225,12 +225,22 @@ export default function WingDetailPage() {
                     <p className="text-xs text-gray-400">{sec.phone}</p>
                   </div>
                 </div>
-                <button
-                  onClick={() => { setReplaceTarget(sec); setShowSecretary(true); }}
-                  className="text-xs text-gray-400 hover:text-orange-500 font-medium px-3 py-1.5 border border-gray-200 rounded-lg hover:border-orange-200 transition-colors"
-                >
-                  Replace
-                </button>
+                <div className="flex items-center gap-2">
+                  <a
+                    href={`tel:${sec.phone}`}
+                    onClick={e => e.stopPropagation()}
+                    className="p-2 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+                    title={`Call ${sec.name}`}
+                  >
+                    <Phone size={14} className="text-green-600" />
+                  </a>
+                  <button
+                    onClick={() => { setReplaceTarget(sec); setShowSecretary(true); }}
+                    className="text-xs text-gray-400 hover:text-orange-500 font-medium px-3 py-1.5 border border-gray-200 rounded-lg hover:border-orange-200 transition-colors"
+                  >
+                    Replace
+                  </button>
+                </div>
               </div>
             ))}
           </div>

@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { Building2, Plus, Search, ChevronRight, MoreVertical, Eye, Trash2, X, CheckCircle, MapPin } from 'lucide-react';
+import { toast } from 'sonner';
 import api from '@/lib/api';
 
 const MapPicker = dynamic(() => import('@/components/ui/MapPicker'), { ssr: false });
@@ -41,7 +42,7 @@ type WizardStep = 'society' | 'wing' | 'success';
 interface CreatedSociety { id: string; name: string; }
 interface CreatedWing { name: string; flatsCreated: number; secretaryName?: string; }
 
-function AddSocietyModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: () => void }) {
+function AddSocietyModal({ onClose, onSuccess }: { onClose: () => void; onSuccess: (societyId: string) => void }) {
   const router = useRouter();
   const [step, setStep] = useState<WizardStep>('society');
   const [createdSociety, setCreatedSociety] = useState<CreatedSociety | null>(null);
@@ -106,13 +107,13 @@ function AddSocietyModal({ onClose, onSuccess }: { onClose: () => void; onSucces
         secretaryName: wingForm.secretaryName || undefined,
       });
       setStep('success');
-      onSuccess();
+      onSuccess(createdSociety.id);
     } catch (err: any) {
       setWingError(err.response?.data?.message || 'Failed to create wing');
     } finally { setWingSubmitting(false); }
   };
 
-  const handleSkipWing = () => { setStep('success'); onSuccess(); };
+  const handleSkipWing = () => { setStep('success'); if (createdSociety) onSuccess(createdSociety.id); };
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -354,9 +355,10 @@ function DeleteConfirmModal({
     setDeleting(true);
     try {
       await api.delete(`/superadmin/societies/${society.id}`);
+      toast.success('Society deleted');
       onConfirm();
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Failed to delete society');
+      toast.error(err.response?.data?.message || 'Failed to delete society');
       setDeleting(false);
     }
   };
@@ -413,7 +415,7 @@ function SocietyCard({ society, onDelete, onView }: {
   const totalFlats = society.wings?.reduce((sum, w) => sum + (w.flatsCount ?? 0), 0) ?? 0;
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-[#EEF2FF] hover:shadow-md transition-shadow relative" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
+    <div className="bg-white rounded-2xl p-6 border border-[#EEF2FF] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 relative cursor-pointer" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }} onClick={onView}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -439,13 +441,13 @@ function SocietyCard({ society, onDelete, onView }: {
           {menuOpen && (
             <div className="absolute right-0 top-8 bg-white rounded-xl shadow-lg border border-gray-100 z-10 min-w-36 py-1">
               <button
-                onClick={() => { onView(); setMenuOpen(false); }}
+                onClick={(e) => { e.stopPropagation(); onView(); setMenuOpen(false); }}
                 className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
               >
                 <Eye size={14} /> View Details
               </button>
               <button
-                onClick={() => { onDelete(); setMenuOpen(false); }}
+                onClick={(e) => { e.stopPropagation(); onDelete(); setMenuOpen(false); }}
                 className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
               >
                 <Trash2 size={14} /> Delete
@@ -499,6 +501,7 @@ function SocietyCard({ society, onDelete, onView }: {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function SocietiesPage() {
+  const router = useRouter();
   const [societies, setSocieties] = useState<Society[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -604,7 +607,7 @@ export default function SocietiesPage() {
               key={society.id}
               society={society}
               onDelete={() => { setSelectedSociety(society); setShowDeleteConfirm(true); }}
-              onView={() => { window.location.href = `/dashboard/societies/${society.id}`; }}
+              onView={() => router.push(`/dashboard/societies/${society.id}`)}
             />
           ))}
         </div>
@@ -613,7 +616,7 @@ export default function SocietiesPage() {
       {showAddModal && (
         <AddSocietyModal
           onClose={() => setShowAddModal(false)}
-          onSuccess={() => { fetchSocieties(); setShowAddModal(false); }}
+          onSuccess={(newId) => { setShowAddModal(false); router.push(`/dashboard/societies/${newId}`); }}
         />
       )}
 

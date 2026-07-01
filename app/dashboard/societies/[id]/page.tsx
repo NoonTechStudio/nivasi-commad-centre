@@ -3,8 +3,9 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
   ArrowLeft, Building2, Home, Plus, X, ChevronRight,
-  CreditCard, Edit2, AlertCircle, Phone,
+  CreditCard, Edit2, AlertCircle, Phone, Trash2,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import api from '@/lib/api';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -65,6 +66,7 @@ function EditSocietyModal({
     setSaving(true); setError('');
     try {
       await api.put(`/superadmin/societies/${society.id}`, form);
+      toast.success('Society updated');
       onSuccess();
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to update society');
@@ -147,6 +149,7 @@ function AddWingModal({
         payload.secretary_phone = form.secretaryPhone;
       }
       await api.post('/superadmin/wings', payload);
+      toast.success(`Wing "${form.name}" created`);
       onSuccess();
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to create wing');
@@ -205,6 +208,60 @@ function AddWingModal({
   );
 }
 
+// ─── Delete Wing Modal ────────────────────────────────────────────────────────
+
+function DeleteWingModal({
+  wing, onClose, onSuccess,
+}: { wing: Wing; onClose: () => void; onSuccess: () => void }) {
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      await api.delete(`/superadmin/wings/${wing.id}`);
+      toast.success('Wing deleted successfully');
+      onSuccess();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to delete wing');
+      setDeleting(false);
+    }
+  };
+
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', h);
+    return () => document.removeEventListener('keydown', h);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+        <div className="flex items-start gap-4 mb-5">
+          <div className="w-11 h-11 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <Trash2 size={20} className="text-red-600" />
+          </div>
+          <div>
+            <h2 className="text-base font-bold text-gray-900">Delete {wing.name}?</h2>
+            <p className="text-sm text-gray-500 mt-1">
+              This will permanently delete the wing and all its flats, residents and data. This cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <button onClick={onClose}
+            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+            Cancel
+          </button>
+          <button onClick={handleDelete} disabled={deleting}
+            className="flex-1 py-2.5 bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700 disabled:opacity-50 transition-colors">
+            {deleting ? 'Deleting...' : 'Delete Wing'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function SocietyDetailPage() {
@@ -220,6 +277,8 @@ export default function SocietyDetailPage() {
   const [tab, setTab] = useState<Tab>('overview');
   const [showAddWing, setShowAddWing] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [showDeleteWing, setShowDeleteWing] = useState(false);
+  const [wingToDelete, setWingToDelete] = useState<Wing | null>(null);
   const [notes, setNotes] = useState('');
   const [savingNotes, setSavingNotes] = useState(false);
 
@@ -467,7 +526,7 @@ export default function SocietyDetailPage() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-4">
                       <div className="text-center hidden sm:block">
                         <p className="text-sm font-bold text-gray-900">{wing.flatsCount ?? 0}</p>
                         <p className="text-xs text-gray-400">Flats</p>
@@ -476,6 +535,13 @@ export default function SocietyDetailPage() {
                         <p className="text-sm font-bold text-gray-900">{wing.residentCount ?? 0}</p>
                         <p className="text-xs text-gray-400">Residents</p>
                       </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setWingToDelete(wing); setShowDeleteWing(true); }}
+                        className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete wing"
+                      >
+                        <Trash2 size={15} />
+                      </button>
                       <button onClick={() => router.push(`/dashboard/societies/${id}/wings/${wing.id}`)}
                         className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-700 font-medium">
                         View Wing <ChevronRight size={14} />
@@ -551,6 +617,13 @@ export default function SocietyDetailPage() {
       )}
       {showEdit && society && (
         <EditSocietyModal society={society} onClose={() => setShowEdit(false)} onSuccess={() => { fetchData(); setShowEdit(false); }} />
+      )}
+      {showDeleteWing && wingToDelete && (
+        <DeleteWingModal
+          wing={wingToDelete}
+          onClose={() => { setShowDeleteWing(false); setWingToDelete(null); }}
+          onSuccess={() => { fetchData(); setShowDeleteWing(false); setWingToDelete(null); }}
+        />
       )}
     </div>
   );
