@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
   ArrowLeft, Building2, Home, Plus, X, ChevronRight,
-  CreditCard, Edit2, AlertCircle, Phone, Trash2,
+  CreditCard, Edit2, AlertCircle, Phone, Trash2, KeyRound, Copy, RefreshCw,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '@/lib/api';
@@ -24,7 +24,7 @@ interface Society {
   id: string; name: string; address: string; city: string; state: string; pinCode?: string;
   subscriptionStatus: string; planType?: string; monthlyAmount?: number;
   subscriptionStart?: string; subscriptionEnd?: string; trialEndsAt?: string;
-  notes?: string; wings: Wing[];
+  notes?: string; wings: Wing[]; demoOtpCode?: string;
 }
 
 type Tab = 'overview' | 'wings' | 'financials';
@@ -281,6 +281,7 @@ export default function SocietyDetailPage() {
   const [wingToDelete, setWingToDelete] = useState<Wing | null>(null);
   const [notes, setNotes] = useState('');
   const [savingNotes, setSavingNotes] = useState(false);
+  const [regenerating, setRegenerating] = useState(false);
 
   const fetchData = useCallback(async () => {
     setError('');
@@ -315,6 +316,24 @@ export default function SocietyDetailPage() {
     try {
       await api.put(`/superadmin/societies/${id}`, { notes });
     } catch { /* silent */ } finally { setSavingNotes(false); }
+  };
+
+  const copyCode = () => {
+    if (!society?.demoOtpCode) return;
+    navigator.clipboard.writeText(society.demoOtpCode);
+    toast.success('Login code copied');
+  };
+
+  const regenerateCode = async () => {
+    if (!confirm('Generate a new login code for this society? Residents and the secretary will need the new code to log in — anyone still using the old one will be locked out.')) return;
+    setRegenerating(true);
+    try {
+      await api.post(`/superadmin/societies/${id}/regenerate-otp`);
+      toast.success('New login code generated');
+      fetchData();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to regenerate code');
+    } finally { setRegenerating(false); }
   };
 
   if (loading) {
@@ -454,6 +473,27 @@ export default function SocietyDetailPage() {
 
           {/* Subscription info */}
           <div className="space-y-4">
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-base font-semibold text-gray-900 flex items-center gap-2">
+                  <KeyRound size={16} className="text-blue-600" /> Login Code
+                </h3>
+                <button onClick={regenerateCode} disabled={regenerating}
+                  className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 disabled:opacity-50">
+                  <RefreshCw size={12} className={regenerating ? 'animate-spin' : ''} /> Regenerate
+                </button>
+              </div>
+              <p className="text-xs text-gray-400 mb-3">
+                Residents and the secretary use this in place of an SMS OTP. Share it when you onboard them.
+              </p>
+              <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
+                <span className="text-xl font-bold tracking-[0.3em] text-gray-900">{society.demoOtpCode ?? '—'}</span>
+                <button onClick={copyCode} className="p-2 hover:bg-gray-200 rounded-lg" title="Copy">
+                  <Copy size={15} className="text-gray-500" />
+                </button>
+              </div>
+            </div>
+
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-3">
               <h3 className="text-base font-semibold text-gray-900">Subscription</h3>
               {[
