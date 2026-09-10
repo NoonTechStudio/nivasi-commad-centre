@@ -126,24 +126,48 @@ function EditSocietyModal({
 
 // ─── Add Wing Modal ───────────────────────────────────────────────────────────
 
+const LAYOUT_TYPES = [
+  { value: 'FLOORS', label: 'Apartment building', sublabel: 'Multiple floors, flats stacked per floor' },
+  { value: 'UNITS', label: 'Villas / Bungalows / Row houses', sublabel: 'Single-level units side by side, no floors' },
+] as const;
+
 function AddWingModal({
   societyId, onClose, onSuccess,
 }: { societyId: string; onClose: () => void; onSuccess: () => void }) {
-  const [form, setForm] = useState({ name: '', floors: '', flatsPerFloor: '', secretaryName: '', secretaryPhone: '' });
+  const [form, setForm] = useState({
+    name: '', layoutType: 'FLOORS' as 'FLOORS' | 'UNITS',
+    floors: '', flatsPerFloor: '', totalUnits: '', unitLabel: '',
+    secretaryName: '', secretaryPhone: '',
+  });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, [k]: e.target.value }));
-  const totalFlats = form.floors && form.flatsPerFloor ? Number(form.floors) * Number(form.flatsPerFloor) : 0;
+  const totalFlats = form.layoutType === 'FLOORS'
+    ? (form.floors && form.flatsPerFloor ? Number(form.floors) * Number(form.flatsPerFloor) : 0)
+    : (form.totalUnits ? Number(form.totalUnits) : 0);
 
   const handleSubmit = async () => {
-    if (!form.name || !form.floors || !form.flatsPerFloor) { setError('Wing name, floors and flats per floor are required'); return; }
+    if (!form.name) { setError('Wing name is required'); return; }
+    if (form.layoutType === 'FLOORS' && (!form.floors || !form.flatsPerFloor)) {
+      setError('Total floors and flats per floor are required'); return;
+    }
+    if (form.layoutType === 'UNITS' && !form.totalUnits) {
+      setError('Total number of units is required'); return;
+    }
     setSubmitting(true);
     try {
       const payload: Record<string, unknown> = {
         name: form.name, society_id: societyId,
-        total_floors: Number(form.floors), flats_per_floor: Number(form.flatsPerFloor),
+        layout_type: form.layoutType,
         auto_generate_flats: true,
       };
+      if (form.layoutType === 'FLOORS') {
+        payload.total_floors = Number(form.floors);
+        payload.flats_per_floor = Number(form.flatsPerFloor);
+      } else {
+        payload.total_units = Number(form.totalUnits);
+        if (form.unitLabel) payload.unit_label = form.unitLabel;
+      }
       if (form.secretaryName && form.secretaryPhone) {
         payload.secretary_name = form.secretaryName;
         payload.secretary_phone = form.secretaryPhone;
@@ -166,24 +190,64 @@ function AddWingModal({
         <div className="space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">Wing Name *</label>
-            <input value={form.name} onChange={set('name')} placeholder="e.g. Tower-A"
+            <input value={form.name} onChange={set('name')} placeholder="e.g. Tower-A or Greenwood Villas"
               className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">Total Floors *</label>
-              <input type="number" min={1} value={form.floors} onChange={set('floors')} placeholder="e.g. 10"
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
-            </div>
-            <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1">Flats per Floor *</label>
-              <input type="number" min={1} value={form.flatsPerFloor} onChange={set('flatsPerFloor')} placeholder="e.g. 4"
-                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
+
+          <div>
+            <label className="text-sm font-medium text-gray-700 block mb-2">Layout *</label>
+            <div className="grid grid-cols-1 gap-2">
+              {LAYOUT_TYPES.map(lt => (
+                <button
+                  key={lt.value}
+                  type="button"
+                  onClick={() => setForm(f => ({ ...f, layoutType: lt.value }))}
+                  className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-colors ${
+                    form.layoutType === lt.value
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:bg-gray-50'
+                  }`}
+                >
+                  <p className="font-medium text-gray-900">{lt.label}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">{lt.sublabel}</p>
+                </button>
+              ))}
             </div>
           </div>
+
+          {form.layoutType === 'FLOORS' ? (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-1">Total Floors *</label>
+                <input type="number" min={1} value={form.floors} onChange={set('floors')} placeholder="e.g. 10"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-1">Flats per Floor *</label>
+                <input type="number" min={1} value={form.flatsPerFloor} onChange={set('flatsPerFloor')} placeholder="e.g. 4"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-1">Total Units *</label>
+                <input type="number" min={1} value={form.totalUnits} onChange={set('totalUnits')} placeholder="e.g. 40"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-1">Unit Label</label>
+                <input value={form.unitLabel} onChange={set('unitLabel')} placeholder="Defaults to wing name"
+                  className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
+              </div>
+            </div>
+          )}
           {totalFlats > 0 && (
             <p className="text-xs text-blue-600 bg-blue-50 px-3 py-2 rounded-lg">
-              Will auto-generate <strong>{totalFlats} flats</strong>
+              Will auto-generate <strong>{totalFlats} flat{totalFlats !== 1 ? 's' : ''}</strong>
+              {form.layoutType === 'UNITS' && (
+                <> — numbered {(form.unitLabel || form.name || 'Unit')}-01 through {(form.unitLabel || form.name || 'Unit')}-{String(totalFlats).padStart(2, '0')}</>
+              )}
             </p>
           )}
           <div className="border-t border-gray-100 pt-4">
