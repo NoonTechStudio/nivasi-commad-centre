@@ -449,7 +449,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       >
         {/* Logo */}
         <div className={`h-16 flex items-center border-b border-white/10 ${collapsed ? 'justify-center px-0' : 'px-6'}`}>
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-600/30">
             <span className="text-white font-bold text-sm">N</span>
           </div>
           {!collapsed && (

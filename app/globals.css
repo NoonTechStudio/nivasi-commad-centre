@@ -15,12 +15,12 @@
   --color-success: #16A34A;
   --color-warning: #D97706;
   --color-danger: #DC2626;
-  --color-background: #F0F4F8;
-  --font-sans: system-ui, sans-serif;
+  --color-background: #F5F7FF;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 body {
-  background: #F5F7FF;
+  background: var(--color-background);
   color: #0F172A;
 }
 

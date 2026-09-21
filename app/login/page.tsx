@@ -77,7 +77,6 @@ export default function LoginPage() {
       }
 
       const cleanPhone = phone.trim().replace(/\s/g, '');
-      console.log('Verifying OTP:', otpValue, 'for phone:', cleanPhone);
       await verifyOtp(cleanPhone, otpValue);
 
       setTimeout(() => {
@@ -211,8 +210,6 @@ export default function LoginPage() {
                   +91 {phone}
                 </span>
               </p>
-              <p className="text-xs text-gray-400 mb-3">Phone: [{phone}] Length: {phone.length}</p>
-
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="block text-sm font-medium text-gray-700">Enter OTP</label>
