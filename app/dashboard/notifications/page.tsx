@@ -123,8 +123,8 @@ export default function NotificationsPage() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
-          <p className="text-sm text-gray-400 mt-1">
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">Notifications</h1>
+          <p className="text-sm text-gray-500 mt-1">
             {unreadCount > 0 ? `${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}` : 'All caught up'}
           </p>
         </div>
@@ -161,12 +161,12 @@ export default function NotificationsPage() {
 
       {/* Notifications list */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-16 text-center">
+        <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-16 text-center">
           <Bell size={40} className="mx-auto mb-3 text-gray-200" />
           <p className="text-gray-400 text-sm">No {filter === 'all' ? '' : filter} notifications</p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm overflow-hidden">
           {filtered.map((n, i) => {
             const cfg = TYPE_CONFIG[n.type] ?? TYPE_CONFIG.system;
             return (
@@ -197,7 +197,7 @@ export default function NotificationsPage() {
                         <button
                           onClick={(e) => { e.stopPropagation(); markRead(n.id); }}
                           title="Mark as read"
-                          className="p-1.5 hover:bg-white rounded-lg text-gray-400 hover:text-green-600 transition-colors">
+                          className="p-1.5 hover:bg-white rounded-lg text-gray-400 hover:text-emerald-600 transition-colors">
                           <Check size={14} />
                         </button>
                       )}

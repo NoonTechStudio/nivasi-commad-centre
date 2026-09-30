@@ -85,15 +85,15 @@ function KpiCard({
   iconColor: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+    <div className="bg-white rounded-2xl p-5 border border-gray-200/70 shadow-sm">
       <div className={`w-10 h-10 ${iconBg} rounded-xl flex items-center justify-center mb-3`}>
         <Icon size={20} className={iconColor} />
       </div>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
+      <p className="text-2xl font-semibold tracking-tight tabular-nums text-gray-900">{value}</p>
       <p className="text-sm text-gray-500 mt-0.5">{label}</p>
       <p className="text-xs text-gray-400 mt-1">{sub}</p>
       {trend && (
-        <p className="text-xs text-green-600 font-medium mt-1 flex items-center gap-1">
+        <p className="text-xs text-emerald-600 font-medium mt-1 flex items-center gap-1">
           <TrendingUp size={10} /> {trend}
         </p>
       )}
@@ -105,8 +105,8 @@ function KpiCard({
 
 function ChartCard({ title, sub, children }: { title: string; sub?: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-      <h2 className="text-base font-bold text-gray-900">{title}</h2>
+    <div className="bg-white rounded-2xl p-6 border border-gray-200/70 shadow-sm">
+      <h2 className="text-base font-semibold tracking-tight text-gray-900">{title}</h2>
       {sub && <p className="text-xs text-gray-400 mt-0.5 mb-4">{sub}</p>}
       {!sub && <div className="mb-4" />}
       {children}
@@ -217,8 +217,8 @@ export default function AnalyticsPage() {
       {/* ── Header ────────────────────────────────────────────────────────────── */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Analytics</h1>
-          <p className="text-sm text-gray-400 mt-1">Platform performance overview</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">Analytics</h1>
+          <p className="text-sm text-gray-500 mt-1">Platform performance overview</p>
         </div>
         <div className="flex gap-3">
           <select
@@ -246,7 +246,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* ── KPI Cards ─────────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
           label="Monthly Recurring Revenue"
           value={`₹${(subscriptions?.monthlyRevenue ?? 0).toLocaleString('en-IN')}`}
@@ -254,7 +254,7 @@ export default function AnalyticsPage() {
           trend="+12% vs last month"
           icon={TrendingUp}
           iconBg="bg-green-50"
-          iconColor="text-green-600"
+          iconColor="text-emerald-600"
         />
         <KpiCard
           label="Total Societies"
@@ -475,14 +475,14 @@ export default function AnalyticsPage() {
       {/* ── Row 4: Top Cities + Milestones ───────────────────────────────────── */}
       <div className="grid grid-cols-2 gap-4">
         {/* Top Cities Table */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h2 className="text-base font-bold text-gray-900">Top Cities</h2>
+            <h2 className="text-base font-semibold tracking-tight text-gray-900">Top Cities</h2>
             <p className="text-xs text-gray-400 mt-0.5">By society count and estimated MRR</p>
           </div>
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50">
+              <tr className="border-b border-gray-200/70 bg-gray-50/80">
                 <th className="text-left text-xs font-medium text-gray-400 px-5 py-3">City</th>
                 <th className="text-center text-xs font-medium text-gray-400 px-4 py-3">Societies</th>
                 <th className="text-right text-xs font-medium text-gray-400 px-4 py-3">Est. MRR</th>
@@ -491,13 +491,13 @@ export default function AnalyticsPage() {
             </thead>
             <tbody>
               {TOP_CITIES.map((row) => (
-                <tr key={row.city} className="border-t border-gray-50 hover:bg-gray-50/50">
+                <tr key={row.city} className="border-t border-gray-100 hover:bg-blue-50/40">
                   <td className="px-5 py-3 font-medium text-gray-900">{row.city}</td>
                   <td className="px-4 py-3 text-center text-gray-700">{row.societies}</td>
                   <td className="px-4 py-3 text-right text-gray-700">₹{row.mrr.toLocaleString('en-IN')}</td>
                   <td className="px-4 py-3 text-center">
                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                      row.positive ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'
+                      row.positive ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15' : 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/15'
                     }`}>
                       {row.growth}
                     </span>
@@ -509,8 +509,8 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Milestones */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="text-base font-bold text-gray-900 mb-1">Milestones</h2>
+        <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6">
+          <h2 className="text-base font-semibold tracking-tight text-gray-900 mb-1">Milestones</h2>
           <p className="text-xs text-gray-400 mb-5">Platform achievements</p>
           <div className="space-y-4">
             {MILESTONES.map((m, i) => (

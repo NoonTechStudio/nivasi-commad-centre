@@ -31,11 +31,11 @@ interface SubscriptionSummary {
   annualRevenue: number;
 }
 
-const colorMap: Record<string, { bg: string; icon: string }> = {
-  blue:   { bg: 'bg-blue-50',   icon: 'text-blue-600' },
-  purple: { bg: 'bg-purple-50', icon: 'text-purple-600' },
-  green:  { bg: 'bg-green-50',  icon: 'text-green-600' },
-  orange: { bg: 'bg-orange-50', icon: 'text-orange-600' },
+const colorMap: Record<string, { bg: string; icon: string; glow: string }> = {
+  blue:   { bg: 'bg-blue-50 ring-blue-100',       icon: 'text-blue-600',    glow: 'from-blue-500/10' },
+  purple: { bg: 'bg-purple-50 ring-purple-100',   icon: 'text-purple-600',  glow: 'from-purple-500/10' },
+  green:  { bg: 'bg-emerald-50 ring-emerald-100', icon: 'text-emerald-600', glow: 'from-emerald-500/10' },
+  orange: { bg: 'bg-orange-50 ring-orange-100',   icon: 'text-orange-600',  glow: 'from-orange-500/10' },
 };
 
 function StatCard({
@@ -53,18 +53,21 @@ function StatCard({
   return (
     <div
       onClick={onClick}
-      className={`bg-white rounded-2xl p-6 border ${isAlert ? 'border-orange-200' : 'border-[#EEF2FF]'} hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 ${onClick ? 'cursor-pointer' : ''}`}
-      style={{ boxShadow: isAlert ? undefined : '0 1px 3px rgba(99,102,241,0.08)' }}
+      className={`group relative overflow-hidden bg-white rounded-2xl p-5 border shadow-sm ${isAlert ? 'border-orange-200' : 'border-gray-200/70'} hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ${onClick ? 'cursor-pointer' : ''}`}
     >
-      <div className="flex items-center justify-between mb-4">
-        <div className={`w-10 h-10 ${c.bg} rounded-xl flex items-center justify-center`}>
-          <Icon size={20} className={c.icon} />
+      <div className={`pointer-events-none absolute -top-12 -right-12 w-32 h-32 rounded-full bg-gradient-to-br ${c.glow} to-transparent blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+      <div className="relative flex items-center justify-between mb-5">
+        <div className={`w-10 h-10 ${c.bg} ring-1 ring-inset rounded-xl flex items-center justify-center`}>
+          <Icon size={19} className={c.icon} />
         </div>
-        <ArrowUpRight size={16} className="text-gray-300" />
+        <ArrowUpRight size={16} className="text-gray-300 group-hover:text-gray-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
       </div>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
-      <p className="text-sm text-gray-500 mt-1">{title}</p>
-      <p className={`text-xs mt-2 font-medium ${isAlert ? 'text-orange-500' : 'text-green-500'}`}>{trend}</p>
+      <p className="relative text-[13px] font-medium text-gray-500">{title}</p>
+      <p className="relative text-[28px] leading-tight font-semibold tracking-tight text-gray-900 mt-1 tabular-nums">{value}</p>
+      <p className={`relative inline-flex items-center gap-1.5 text-xs mt-3 font-medium ${isAlert ? 'text-orange-600' : 'text-emerald-600'}`}>
+        <span className={`w-1.5 h-1.5 rounded-full ${isAlert ? 'bg-orange-500' : 'bg-emerald-500'}`} />
+        {trend}
+      </p>
     </div>
   );
 }
@@ -123,8 +126,14 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="space-y-6">
+        <div className="skeleton h-36 !rounded-3xl" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map(i => <div key={i} className="skeleton h-16 !rounded-2xl" />)}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {[1, 2, 3, 4].map(i => <div key={i} className="skeleton h-40 !rounded-2xl" />)}
+        </div>
       </div>
     );
   }
@@ -132,56 +141,60 @@ export default function DashboardPage() {
   return (
     <div>
       {/* ── Welcome Banner ─────────────────────────────────────────────────── */}
-      <div className="bg-gradient-to-r from-[#0F172A] via-[#1565C0] to-[#1E40AF] rounded-2xl p-6 mb-6">
-        <div className="flex items-center justify-between">
+      <div className="relative overflow-hidden bg-gray-950 rounded-3xl p-6 sm:p-8 mb-6 shadow-xl shadow-blue-950/10">
+        <div className="absolute inset-0 bg-grid [mask-image:linear-gradient(to_right,transparent,black_60%)]" />
+        <div className="absolute -top-24 right-10 w-80 h-80 rounded-full bg-blue-600/40 blur-[90px]" />
+        <div className="absolute -bottom-32 left-1/3 w-72 h-72 rounded-full bg-indigo-600/30 blur-[90px]" />
+        <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <p className="text-gray-400 text-sm">
+            <p className="text-blue-200/80 text-sm font-medium">
               {(() => { const h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'; })()}, Admin
             </p>
-            <p className="text-white text-xl font-bold mt-1">Here&apos;s your Nivasi overview</p>
-            <p className="text-gray-400 text-xs mt-1">
+            <p className="text-white text-2xl sm:text-[28px] font-semibold tracking-tight mt-1">Here&apos;s your Nivasi overview</p>
+            <p className="text-gray-400 text-xs mt-2">
               {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </div>
-          <div className="flex gap-8">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-white">{stats?.societies ?? 0}</p>
-              <p className="text-gray-400 text-xs mt-0.5">Societies</p>
+          <div className="grid grid-cols-3 md:flex rounded-2xl bg-white/[0.05] ring-1 ring-inset ring-white/10 backdrop-blur-sm divide-x divide-white/10">
+            <div className="px-3 sm:px-6 py-3.5 min-w-0">
+              <p className="text-gray-400 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider">Societies</p>
+              <p className="text-lg sm:text-2xl font-semibold text-white mt-1 tabular-nums truncate">{stats?.societies ?? 0}</p>
             </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-green-400">
+            <div className="px-3 sm:px-6 py-3.5 min-w-0">
+              <p className="text-gray-400 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider">MRR</p>
+              <p className="text-lg sm:text-2xl font-semibold text-emerald-400 mt-1 tabular-nums truncate">
                 ₹{(subscriptions?.monthlyRevenue ?? 0).toLocaleString('en-IN')}
               </p>
-              <p className="text-gray-400 text-xs mt-0.5">MRR</p>
             </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-orange-400">{subscriptions?.totalExpiring30 ?? 0}</p>
-              <p className="text-gray-400 text-xs mt-0.5">Expiring</p>
+            <div className="px-3 sm:px-6 py-3.5 min-w-0">
+              <p className="text-gray-400 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider">Expiring</p>
+              <p className="text-lg sm:text-2xl font-semibold text-orange-400 mt-1 tabular-nums truncate">{subscriptions?.totalExpiring30 ?? 0}</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { label: 'Add Society',    icon: Plus,          href: '/dashboard/societies',     bg: 'bg-blue-50',   text: 'text-blue-600',   hover: 'hover:bg-blue-50'   },
-          { label: 'Record Payment', icon: CreditCard,    href: '/dashboard/subscriptions', bg: 'bg-green-50',  text: 'text-green-600',  hover: 'hover:bg-green-50'  },
-          { label: 'New Ticket',     icon: MessageSquare, href: '/dashboard/support',       bg: 'bg-orange-50', text: 'text-orange-600', hover: 'hover:bg-orange-50' },
-          { label: 'Send Reminders', icon: Send,          href: '/dashboard/subscriptions', bg: 'bg-purple-50', text: 'text-purple-600', hover: 'hover:bg-purple-50' },
+          { label: 'Add Society',    icon: Plus,          href: '/dashboard/societies',     bg: 'bg-blue-50 group-hover:bg-blue-600',      text: 'text-blue-600 group-hover:text-white',    hover: 'hover:border-blue-200'    },
+          { label: 'Record Payment', icon: CreditCard,    href: '/dashboard/subscriptions', bg: 'bg-emerald-50 group-hover:bg-emerald-600', text: 'text-emerald-600 group-hover:text-white', hover: 'hover:border-emerald-200' },
+          { label: 'New Ticket',     icon: MessageSquare, href: '/dashboard/support',       bg: 'bg-orange-50 group-hover:bg-orange-500',   text: 'text-orange-600 group-hover:text-white',  hover: 'hover:border-orange-200'  },
+          { label: 'Send Reminders', icon: Send,          href: '/dashboard/subscriptions', bg: 'bg-purple-50 group-hover:bg-purple-600',   text: 'text-purple-600 group-hover:text-white',  hover: 'hover:border-purple-200'  },
         ].map(({ label, icon: Icon, href, bg, text, hover }) => (
           <button key={label} onClick={() => router.push(href)}
-            className={`flex items-center gap-3 p-4 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all text-sm font-medium text-gray-700 ${hover}`}>
-            <div className={`p-2 rounded-xl ${bg}`}>
-              <Icon size={16} className={text} />
+            className={`group flex items-center gap-3 p-3.5 rounded-2xl border border-gray-200/70 bg-white shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 text-sm font-medium text-gray-700 text-left ${hover}`}>
+            <div className={`p-2.5 rounded-xl transition-colors ${bg}`}>
+              <Icon size={16} className={`transition-colors ${text}`} />
             </div>
-            {label}
+            <span className="flex-1">{label}</span>
+            <ArrowUpRight size={14} className="text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:block" />
           </button>
         ))}
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
         <StatCard title="Total Societies"  value={stats?.societies ?? 0}  icon={Building2}     color="blue"   trend="+2 this month" onClick={() => router.push('/dashboard/societies')} />
         <StatCard title="Total Wings"      value={stats?.wings ?? 0}      icon={Home}          color="purple" trend="Active wings" />
         <StatCard title="Monthly Revenue"  value={`₹${(subscriptions?.monthlyRevenue ?? 0).toLocaleString('en-IN')}`} icon={TrendingUp} color="green" trend="+12% vs last month" onClick={() => router.push('/dashboard/subscriptions')} />
@@ -191,35 +204,42 @@ export default function DashboardPage() {
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         {/* Revenue bar chart */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-200/70">
           <div className="flex justify-between items-center mb-6">
             <div>
               <h2 className="text-base font-semibold text-gray-900">Revenue Overview</h2>
               <p className="text-xs text-gray-400 mt-0.5">Last 6 months</p>
             </div>
-            <span className="text-xs bg-green-50 text-green-600 font-medium px-2 py-1 rounded-full">+23% growth</span>
+            <span className="text-xs bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15 font-medium px-2.5 py-1 rounded-full">↑ 23% growth</span>
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={revenueData} barSize={32}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" vertical={false} />
-              <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#9CA3AF' }} axisLine={false} tickLine={false} />
+              <defs>
+                <linearGradient id="revenueBar" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#3E66F4" />
+                  <stop offset="100%" stopColor="#6289FA" stopOpacity={0.55} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="4 4" stroke="#EEF1F6" vertical={false} />
+              <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#94A0B4' }} axisLine={false} tickLine={false} />
               <YAxis
-                tick={{ fontSize: 12, fill: '#9CA3AF' }}
+                tick={{ fontSize: 12, fill: '#94A0B4' }}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={(v: number) => `₹${(v / 1000).toFixed(0)}k`}
               />
               <Tooltip
                 formatter={(value) => [`₹${Number(value).toLocaleString()}`, 'Revenue']}
-                contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
+                cursor={{ fill: '#F1F4F9', radius: 8 }}
+                contentStyle={{ borderRadius: '12px', border: '1px solid #E3E8F0', boxShadow: '0 12px 20px -4px rgba(16,24,40,0.08)' }}
               />
-              <Bar dataKey="revenue" fill="#1565C0" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="revenue" fill="url(#revenueBar)" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Subscription pie */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200/70">
           <h2 className="text-base font-semibold text-gray-900 mb-1">Subscription Status</h2>
           <p className="text-xs text-gray-400 mb-4">Current distribution</p>
           <ResponsiveContainer width="100%" height={160}>
@@ -231,6 +251,8 @@ export default function DashboardPage() {
                 innerRadius={45}
                 outerRadius={70}
                 paddingAngle={3}
+                cornerRadius={6}
+                stroke="none"
                 dataKey="value"
               >
                 {subscriptionData.map((entry, i) => (
@@ -240,14 +262,14 @@ export default function DashboardPage() {
               <Tooltip />
             </PieChart>
           </ResponsiveContainer>
-          <div className="space-y-2 mt-2">
+          <div className="space-y-1 mt-3">
             {subscriptionData.map((item) => (
-              <div key={item.name} className="flex items-center justify-between text-sm">
+              <div key={item.name} className="flex items-center justify-between text-sm px-2.5 py-1.5 rounded-lg hover:bg-gray-50">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
                   <span className="text-gray-600">{item.name}</span>
                 </div>
-                <span className="font-semibold text-gray-900">{item.value}</span>
+                <span className="font-semibold text-gray-900 tabular-nums">{item.value}</span>
               </div>
             ))}
           </div>
@@ -257,18 +279,18 @@ export default function DashboardPage() {
       {/* Bottom row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent societies */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200/70">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-base font-semibold text-gray-900">Societies</h2>
-            <a href="/dashboard/societies" className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+            <a href="/dashboard/societies" className="text-xs font-medium text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full flex items-center gap-1">
               View all <ArrowUpRight size={12} />
             </a>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-1 -mx-2">
             {societies.slice(0, 5).map((society) => (
-              <div key={society.id} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 transition-colors">
+              <div key={society.id} className="flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-50 to-indigo-50 ring-1 ring-inset ring-blue-100 rounded-xl flex items-center justify-center">
                     <Building2 size={16} className="text-blue-600" />
                   </div>
                   <div>
@@ -276,7 +298,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-400">{society.city} · {society.wings?.length ?? 0} wings</p>
                   </div>
                 </div>
-                <span className="text-xs bg-green-50 text-green-600 font-medium px-2 py-1 rounded-full">Active</span>
+                <span className="inline-flex items-center gap-1.5 text-xs bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15 font-medium px-2 py-0.5 rounded-full"><span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />Active</span>
               </div>
             ))}
             {societies.length === 0 && (
@@ -289,17 +311,17 @@ export default function DashboardPage() {
         </div>
 
         {/* Recent activity */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200/70">
           <h2 className="text-base font-semibold text-gray-900 mb-4">Recent Activity</h2>
-          <div className="space-y-4">
+          <div className="relative space-y-5 before:absolute before:left-[4px] before:top-2 before:bottom-2 before:w-px before:bg-gray-100">
             {[...societies]
               .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
               .slice(0, 5)
               .map((s) => (
                 <div key={s.id} className="flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0 bg-green-500" />
+                  <div className="relative w-[9px] h-[9px] rounded-full mt-1.5 flex-shrink-0 bg-emerald-500 ring-4 ring-emerald-50" />
                   <div className="flex-1">
-                    <p className="text-sm text-gray-700">New society added — {s.name}</p>
+                    <p className="text-sm text-gray-700">New society added — <span className="font-medium text-gray-900">{s.name}</span></p>
                     <p className="text-xs text-gray-400 mt-0.5">{timeAgo(s.createdAt || new Date().toISOString())}</p>
                   </div>
                 </div>

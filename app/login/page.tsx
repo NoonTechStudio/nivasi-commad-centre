@@ -102,70 +102,86 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-white">
       {/* Left panel */}
-      <div
-        className="hidden lg:flex lg:w-3/5 flex-col items-center justify-center relative overflow-hidden"
-        style={{ backgroundColor: '#0D1B2A' }}
-      >
-        <div
-          className="absolute inset-0 opacity-5"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 20% 80%, #1565C0 0%, transparent 50%), radial-gradient(circle at 80% 20%, #1565C0 0%, transparent 50%)',
-          }}
-        />
-        <div className="relative z-10 flex flex-col items-center text-center px-12 max-w-lg">
-          <div className="flex flex-col items-center mb-8">
-            <div className="w-20 h-20 bg-brand-500 rounded-2xl flex items-center justify-center mb-4">
-              <span className="text-white text-3xl font-bold">N</span>
-            </div>
-            <h1 className="text-white text-4xl font-bold">Nivasi</h1>
-            <p className="text-brand-300 text-xl font-medium mt-1">Command Centre</p>
+      <div className="hidden lg:flex lg:w-[55%] flex-col justify-between relative overflow-hidden bg-gray-950 p-12">
+        <div className="absolute inset-0 bg-grid [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+        <div className="absolute -top-40 -left-32 w-[520px] h-[520px] rounded-full bg-blue-600/30 blur-[120px]" />
+        <div className="absolute -bottom-48 -right-24 w-[480px] h-[480px] rounded-full bg-indigo-600/25 blur-[120px]" />
+
+        {/* Brand */}
+        <div className="relative z-10 flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-400 via-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/40 ring-1 ring-white/20">
+            <span className="text-white text-lg font-bold">N</span>
           </div>
-          <p className="text-base text-white/60 mb-12 leading-relaxed">
+          <div className="leading-tight">
+            <p className="text-white font-semibold tracking-tight">Nivasi</p>
+            <p className="text-blue-300/80 text-[11px] font-medium uppercase tracking-[0.14em]">Command Centre</p>
+          </div>
+        </div>
+
+        {/* Hero copy */}
+        <div className="relative z-10 max-w-lg animate-fade-up">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium text-blue-200 bg-blue-500/10 ring-1 ring-inset ring-blue-400/20 mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px] shadow-emerald-400" />
+            Admin console
+          </span>
+          <h1 className="text-white text-[44px] leading-[1.1] font-semibold tracking-tight">
+            Every society,{' '}
+            <span className="bg-gradient-to-r from-blue-300 via-blue-400 to-indigo-300 bg-clip-text text-transparent">
+              one command centre.
+            </span>
+          </h1>
+          <p className="text-base text-gray-400 mt-5 leading-relaxed">
             Manage societies, partners and subscriptions from a single powerful dashboard.
           </p>
-          <div className="flex flex-wrap gap-3 justify-center">
-            {['🏢 Multi-society', '👥 Partner Network', '📊 Analytics'].map((pill) => (
-              <span
-                key={pill}
-                className="px-4 py-2 rounded-full text-sm font-medium border border-white/20 text-white/80 backdrop-blur-sm"
-                style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
+
+          {/* Feature cards */}
+          <div className="grid grid-cols-3 gap-3 mt-10">
+            {[
+              { emoji: '🏢', label: 'Multi-society', sub: 'Unified control' },
+              { emoji: '👥', label: 'Partner Network', sub: 'Grow your reach' },
+              { emoji: '📊', label: 'Analytics', sub: 'Real-time insight' },
+            ].map((f, i) => (
+              <div
+                key={f.label}
+                className="rounded-2xl p-4 bg-white/[0.04] ring-1 ring-inset ring-white/10 backdrop-blur-sm"
+                style={{ animation: `float 6s ease-in-out ${i * 0.8}s infinite` }}
               >
-                {pill}
-              </span>
+                <span className="text-xl">{f.emoji}</span>
+                <p className="text-white text-sm font-medium mt-3">{f.label}</p>
+                <p className="text-gray-500 text-xs mt-0.5">{f.sub}</p>
+              </div>
             ))}
           </div>
         </div>
-        <p className="absolute bottom-8 text-white/30 text-xs">© 2026 Nivasi Technologies</p>
+
+        <p className="relative z-10 text-gray-600 text-xs">© 2026 Nivasi Technologies</p>
       </div>
 
       {/* Right panel */}
-      <div className="flex-1 flex flex-col items-center justify-center bg-white px-8 py-12">
+      <div className="flex-1 flex flex-col items-center justify-center px-6 sm:px-10 py-12 bg-gradient-to-b from-white to-gray-50/60">
         {/* Mobile logo */}
         <div className="flex lg:hidden items-center gap-3 mb-10">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ backgroundColor: '#1565C0' }}
-          >
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-400 via-blue-600 to-indigo-700 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/30">
             <span className="text-white text-lg font-bold">N</span>
           </div>
-          <span className="text-xl font-bold" style={{ color: '#0D1B2A' }}>
-            Nivasi
-          </span>
+          <span className="text-xl font-semibold tracking-tight text-gray-900">Nivasi</span>
         </div>
 
-        <div className="w-full max-w-sm">
-          <h2 className="text-2xl font-bold mb-1" style={{ color: '#0D1B2A' }}>
-            Welcome back
+        <div className="w-full max-w-sm animate-fade-up">
+          <h2 className="text-[28px] font-semibold tracking-tight text-gray-900 mb-1.5">
+            {showOtp ? 'Check your phone' : 'Welcome back'}
           </h2>
-          <p className="text-sm text-gray-500 mb-8">Sign in to your admin account</p>
+          <p className="text-sm text-gray-500 mb-8">
+            {showOtp ? 'Enter the 6-digit code we just sent you' : 'Sign in to your admin account'}
+          </p>
 
           {connectingMsg && (
-            <div className="mb-4 p-3 rounded-xl bg-blue-50 border border-blue-100">
-              <p className="text-sm text-blue-600">
-                🔄 Connecting to server... (this may take 30 seconds on first load)
+            <div className="mb-5 p-3.5 rounded-xl bg-blue-50 ring-1 ring-inset ring-blue-100 flex items-start gap-3">
+              <div className="w-4 h-4 mt-0.5 animate-spin rounded-full border-2 border-blue-200 border-t-blue-600 flex-shrink-0" />
+              <p className="text-sm text-blue-700">
+                Connecting to server… (this may take 30 seconds on first load)
               </p>
             </div>
           )}
@@ -173,13 +189,13 @@ export default function LoginPage() {
           {!showOtp ? (
             <>
               {/* Step 1: Phone input */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <div className="mb-5">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Phone Number
                 </label>
-                <div className="flex items-center border border-gray-200 rounded-xl h-12 overflow-hidden focus-within:ring-1 transition-all" style={{ outline: 'none' }}>
-                  <span className="px-3 text-gray-500 text-sm font-medium border-r border-gray-200 h-full flex items-center bg-gray-50">
-                    +91
+                <div className="flex items-center bg-white border border-gray-200 rounded-xl h-12 overflow-hidden shadow-xs hover:border-gray-300 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
+                  <span className="pl-4 pr-3 text-gray-600 text-sm font-medium border-r border-gray-200 h-full flex items-center gap-1.5 bg-gray-50">
+                    🇮🇳 +91
                   </span>
                   <input
                     type="tel"
@@ -187,7 +203,7 @@ export default function LoginPage() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                     onKeyDown={(e) => e.key === 'Enter' && handleSendOtp()}
-                    className="flex-1 h-full px-4 text-sm outline-none"
+                    className="flex-1 h-full px-4 text-sm tracking-wide outline-none bg-transparent"
                   />
                 </div>
               </div>
@@ -195,32 +211,31 @@ export default function LoginPage() {
               <button
                 onClick={handleSendOtp}
                 disabled={loading}
-                className="w-full h-12 rounded-xl text-white text-sm font-semibold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#1565C0' }}
+                className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
+                {loading && <span className="w-4 h-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />}
                 {loading ? 'Sending OTP...' : 'Send OTP'}
               </button>
             </>
           ) : (
             <>
               {/* Step 2: OTP input */}
-              <p className="text-sm text-gray-600 mb-1">
-                OTP sent to{' '}
-                <span className="font-semibold" style={{ color: '#0D1B2A' }}>
-                  +91 {phone}
-                </span>
-              </p>
-              <div className="mb-4">
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-sm font-medium text-gray-700">Enter OTP</label>
-                  <button
-                    onClick={handleChangeNumber}
-                    className="text-xs font-medium"
-                    style={{ color: '#1565C0' }}
-                  >
-                    Change Number
-                  </button>
-                </div>
+              <div className="flex items-center justify-between mb-5 p-3 rounded-xl bg-gray-50 ring-1 ring-inset ring-gray-200/70">
+                <p className="text-sm text-gray-600">
+                  Sent to{' '}
+                  <span className="font-semibold text-gray-900">
+                    +91 {phone}
+                  </span>
+                </p>
+                <button
+                  onClick={handleChangeNumber}
+                  className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                >
+                  Change Number
+                </button>
+              </div>
+              <div className="mb-5">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Enter OTP</label>
                 <div className="space-y-2">
                   <input
                     type="text"
@@ -229,7 +244,7 @@ export default function LoginPage() {
                     value={otpValue}
                     onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     onKeyDown={(e) => e.key === 'Enter' && handleVerify()}
-                    className="w-full h-14 text-center text-2xl font-bold tracking-[0.5em] border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none"
+                    className="w-full h-14 text-center text-2xl font-semibold tracking-[0.5em] bg-white border border-gray-200 rounded-xl focus:outline-none"
                     placeholder="• • • • • •"
                     autoFocus
                   />
@@ -242,19 +257,23 @@ export default function LoginPage() {
               <button
                 onClick={handleVerify}
                 disabled={loading}
-                className="w-full h-12 rounded-xl text-white text-sm font-semibold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ backgroundColor: '#1565C0' }}
+                className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
+                {loading && <span className="w-4 h-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />}
                 {loading ? 'Verifying...' : 'Verify & Login'}
               </button>
             </>
           )}
 
           {error && (
-            <div className="mt-4 p-3 rounded-xl bg-red-50 border border-red-100">
+            <div className="mt-4 p-3.5 rounded-xl bg-red-50 ring-1 ring-inset ring-red-100 animate-fade-in">
               <p className="text-sm text-red-600">{error}</p>
             </div>
           )}
+
+          <p className="mt-8 text-center text-xs text-gray-400">
+            Protected by one-time password verification
+          </p>
         </div>
 
         <p className="mt-auto pt-12 text-xs text-gray-300">Nivasi Command Centre v1.0</p>

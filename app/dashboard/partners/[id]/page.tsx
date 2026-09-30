@@ -42,9 +42,9 @@ const ROLE_LABELS: Record<string, string> = {
 };
 
 const ROLE_COLORS: Record<string, string> = {
-  STATE_ADMIN: 'bg-blue-50 text-blue-700',
-  CITY_ADMIN: 'bg-purple-50 text-purple-700',
-  AREA_PARTNER: 'bg-orange-50 text-orange-700',
+  STATE_ADMIN: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/15',
+  CITY_ADMIN: 'bg-purple-50 text-purple-700 ring-1 ring-inset ring-purple-600/15',
+  AREA_PARTNER: 'bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/15',
   CUSTOM: 'bg-teal-50 text-teal-700',
 };
 
@@ -93,10 +93,10 @@ function AssignSocietyModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 max-h-[80vh] flex flex-col">
+    <div className="modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-lg p-6 max-h-[80vh] flex flex-col">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-bold text-gray-900">Assign Society</h2>
+          <h2 className="text-base font-semibold tracking-tight text-gray-900">Assign Society</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
             <X size={16} className="text-gray-500" />
           </button>
@@ -226,7 +226,7 @@ export default function PartnerDetailPage() {
       </button>
 
       {/* Header */}
-      <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+      <div className="bg-white rounded-2xl p-6 border border-gray-200/70 shadow-sm">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
@@ -234,7 +234,7 @@ export default function PartnerDetailPage() {
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <h1 className="text-xl font-bold text-gray-900">{partner.name}</h1>
+                <h1 className="text-xl font-semibold tracking-tight text-gray-900">{partner.name}</h1>
                 <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${ROLE_COLORS[partner.role] ?? 'bg-gray-100 text-gray-600'}`}>
                   {ROLE_LABELS[partner.role] ?? partner.role}
                 </span>
@@ -248,13 +248,13 @@ export default function PartnerDetailPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <span className={`text-sm px-3 py-1.5 rounded-full font-medium ${partner.isActive ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'}`}>
+            <span className={`text-sm px-3 py-1.5 rounded-full font-medium ${partner.isActive ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15' : 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/15'}`}>
               {partner.isActive ? '● Active' : '● Inactive'}
             </span>
             <button
               onClick={toggleActive}
               disabled={toggling}
-              className="px-4 py-2 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+              className="px-4 py-2 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
             >
               {toggling ? '...' : partner.isActive ? 'Deactivate' : 'Activate'}
             </button>
@@ -263,14 +263,14 @@ export default function PartnerDetailPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { icon: Building2, label: 'Direct Societies', value: totalSocieties, color: 'text-blue-600', bg: 'bg-blue-50' },
           { icon: Building2, label: 'Total Societies', value: totalSocieties, color: 'text-teal-600', bg: 'bg-teal-50' },
           { icon: Users, label: 'Sub-Partners', value: directChildren, color: 'text-purple-600', bg: 'bg-purple-50' },
           { icon: Percent, label: 'Commission Earned', value: `₹${commissionEarned.toLocaleString('en-IN')}`, color: 'text-orange-600', bg: 'bg-orange-50' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
+          <div key={s.label} className="bg-white rounded-xl p-4 border border-gray-200/70 shadow-sm">
             <div className={`w-9 h-9 ${s.bg} rounded-xl flex items-center justify-center mb-3`}>
               <s.icon size={18} className={s.color} />
             </div>
@@ -332,7 +332,7 @@ export default function PartnerDetailPage() {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                      s.subscriptionStatus === 'EXPIRED' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
+                      s.subscriptionStatus === 'EXPIRED' ? 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/15' : 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15'
                     }`}>
                       {s.subscriptionStatus === 'EXPIRED' ? 'Expired' : 'Active'}
                     </span>
@@ -403,7 +403,7 @@ export default function PartnerDetailPage() {
         <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50">
+              <tr className="border-b border-gray-200/70 bg-gray-50/80">
                 <th className="text-left text-xs font-medium text-gray-400 px-5 py-3">Month</th>
                 <th className="text-center text-xs font-medium text-gray-400 px-4 py-3">Societies</th>
                 <th className="text-center text-xs font-medium text-gray-400 px-4 py-3">Revenue</th>
@@ -418,7 +418,7 @@ export default function PartnerDetailPage() {
                 const actualRevenue = actualSocieties * 999;
                 const actualAmount = Math.round(actualRevenue * partner.commissionPct / 100);
                 return (
-                  <tr key={row.month} className="border-b border-gray-50">
+                  <tr key={row.month} className="border-b border-gray-100">
                     <td className="px-5 py-3 font-medium text-gray-900">{row.month}</td>
                     <td className="px-4 py-3 text-center text-gray-600">{actualSocieties}</td>
                     <td className="px-4 py-3 text-center text-gray-600">₹{actualRevenue.toLocaleString('en-IN')}</td>
@@ -426,7 +426,7 @@ export default function PartnerDetailPage() {
                     <td className="px-4 py-3 text-center font-medium text-gray-900">₹{actualAmount.toLocaleString('en-IN')}</td>
                     <td className="px-4 py-3 text-center">
                       <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                        row.status === 'Paid' ? 'bg-green-50 text-green-700' : 'bg-yellow-50 text-yellow-700'
+                        row.status === 'Paid' ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15' : 'bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/15'
                       }`}>
                         {row.status}
                       </span>

@@ -42,9 +42,9 @@ function fmt(d: string | null) {
 }
 
 const PLAN_COLORS: Record<string, string> = {
-  STARTER: 'bg-blue-50 text-blue-700',
-  STANDARD: 'bg-purple-50 text-purple-700',
-  PREMIUM: 'bg-orange-50 text-orange-700',
+  STARTER: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/15',
+  STANDARD: 'bg-purple-50 text-purple-700 ring-1 ring-inset ring-purple-600/15',
+  PREMIUM: 'bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/15',
   CUSTOM: 'bg-teal-50 text-teal-700',
 };
 
@@ -95,10 +95,10 @@ function AddPaymentModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+    <div className="modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-gray-900">Record Payment</h2>
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">Record Payment</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
             <X size={18} className="text-gray-500" />
           </button>
@@ -158,7 +158,7 @@ function AddPaymentModal({
 
         <div className="flex gap-3 mt-6">
           <button onClick={onClose}
-            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+            className="flex-1 py-2.5 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
             Cancel
           </button>
           <button onClick={handleSubmit} disabled={submitting}
@@ -243,12 +243,12 @@ export default function SubscriptionDetailPage() {
           </button>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-xl font-bold text-gray-900">{society.name}</h1>
+              <h1 className="text-xl font-semibold tracking-tight text-gray-900">{society.name}</h1>
               <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${PLAN_COLORS[society.planType] ?? 'bg-gray-100 text-gray-600'}`}>
                 {society.planType}
               </span>
               <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                society.subscriptionStatus === 'ACTIVE' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'
+                society.subscriptionStatus === 'ACTIVE' ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15' : 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/15'
               }`}>
                 {society.subscriptionStatus}
               </span>
@@ -263,22 +263,22 @@ export default function SubscriptionDetailPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Total Paid', value: `₹${totalPaid.toLocaleString('en-IN')}` },
           { label: 'Months on Record', value: monthsActive.toString() },
           { label: 'Last Payment', value: lastPayment ? fmt(lastPayment.paidAt) : '—' },
           { label: 'Next Due', value: nextDue },
         ].map(({ label, value }) => (
-          <div key={label} className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm">
-            <p className="text-xl font-bold text-gray-900">{value}</p>
+          <div key={label} className="bg-white rounded-xl p-4 border border-gray-200/70 shadow-sm">
+            <p className="text-xl font-semibold tracking-tight text-gray-900">{value}</p>
             <p className="text-sm text-gray-400 mt-0.5">{label}</p>
           </div>
         ))}
       </div>
 
       {/* Payment History Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
           <h2 className="font-bold text-gray-900">Payment History</h2>
           <p className="text-sm text-gray-400">{payments.length} record{payments.length !== 1 ? 's' : ''}</p>
@@ -295,7 +295,7 @@ export default function SubscriptionDetailPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-gray-50">
+              <tr className="border-b border-gray-200/70 bg-gray-50/80">
                 <th className="text-left text-xs font-medium text-gray-400 px-5 py-3">Month / Year</th>
                 <th className="text-right text-xs font-medium text-gray-400 px-4 py-3">Amount</th>
                 <th className="text-left text-xs font-medium text-gray-400 px-4 py-3">Method</th>
@@ -307,7 +307,7 @@ export default function SubscriptionDetailPage() {
             </thead>
             <tbody>
               {payments.map((p) => (
-                <tr key={p.id} className="border-t border-gray-50 hover:bg-gray-50/50">
+                <tr key={p.id} className="border-t border-gray-100 hover:bg-blue-50/40">
                   <td className="px-5 py-3 font-medium text-gray-900">
                     {MONTHS[p.month - 1]} {p.year}
                   </td>

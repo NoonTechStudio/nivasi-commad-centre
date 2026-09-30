@@ -41,19 +41,19 @@ interface Summary {
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 const PLAN_COLORS: Record<string, string> = {
-  STARTER: 'bg-blue-50 text-blue-700',
-  STANDARD: 'bg-purple-50 text-purple-700',
-  PREMIUM: 'bg-orange-50 text-orange-700',
+  STARTER: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/15',
+  STANDARD: 'bg-purple-50 text-purple-700 ring-1 ring-inset ring-purple-600/15',
+  PREMIUM: 'bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/15',
   CUSTOM: 'bg-teal-50 text-teal-700',
 };
 
 function getDaysLeft(subscriptionEnd: string | null, daysLeft: number | null) {
-  if (!subscriptionEnd) return { text: 'Active', color: 'text-green-600 bg-green-50' };
-  if (daysLeft === null) return { text: 'Active', color: 'text-green-600 bg-green-50' };
+  if (!subscriptionEnd) return { text: 'Active', color: 'text-emerald-600 bg-green-50' };
+  if (daysLeft === null) return { text: 'Active', color: 'text-emerald-600 bg-green-50' };
   if (daysLeft < 0) return { text: 'Expired', color: 'text-red-600 bg-red-50' };
   if (daysLeft <= 30) return { text: `${daysLeft}d`, color: 'text-red-600 bg-red-50' };
   if (daysLeft <= 90) return { text: `${daysLeft}d`, color: 'text-orange-600 bg-orange-50' };
-  return { text: `${daysLeft}d`, color: 'text-green-600 bg-green-50' };
+  return { text: `${daysLeft}d`, color: 'text-emerald-600 bg-green-50' };
 }
 
 function fmt(d: string | null) {
@@ -121,10 +121,10 @@ function RecordPaymentModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+    <div className="modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-gray-900">Record Payment</h2>
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">Record Payment</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
             <X size={18} className="text-gray-500" />
           </button>
@@ -207,7 +207,7 @@ function RecordPaymentModal({
 
         <div className="flex gap-3 mt-6">
           <button onClick={onClose}
-            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+            className="flex-1 py-2.5 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
             Cancel
           </button>
           <button onClick={handleSubmit} disabled={submitting}
@@ -258,10 +258,10 @@ function ChangePlanModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+    <div className="modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-md p-6">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-gray-900">Change Plan</h2>
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">Change Plan</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
             <X size={18} className="text-gray-500" />
           </button>
@@ -282,7 +282,7 @@ function ChangePlanModal({
                 <p className="text-xs text-gray-400">{p.desc}</p>
               </div>
               {p.amount && (
-                <p className="text-sm font-bold text-gray-900">₹{p.amount}<span className="text-xs text-gray-400 font-normal">/mo</span></p>
+                <p className="text-sm font-semibold text-gray-900">₹{p.amount}<span className="text-xs text-gray-400 font-normal">/mo</span></p>
               )}
             </button>
           ))}
@@ -300,7 +300,7 @@ function ChangePlanModal({
 
         <div className="flex gap-3">
           <button onClick={onClose}
-            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+            className="flex-1 py-2.5 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
             Cancel
           </button>
           <button onClick={handleSubmit} disabled={submitting}
@@ -345,10 +345,10 @@ function ReminderModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
+    <div className="modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-lg p-6">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-gray-900">Send Reminder — {society.name}</h2>
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">Send Reminder — {society.name}</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
             <X size={18} className="text-gray-500" />
           </button>
@@ -363,7 +363,7 @@ function ReminderModal({
 
         <div className="flex gap-3">
           <button onClick={onClose}
-            className="py-2.5 px-4 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+            className="py-2.5 px-4 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
             Close
           </button>
           <button onClick={openWhatsApp}
@@ -371,7 +371,7 @@ function ReminderModal({
             <Send size={15} /> Open WhatsApp
           </button>
           <button onClick={markReminded} disabled={marking || marked}
-            className="py-2.5 px-4 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50">
+            className="py-2.5 px-4 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50">
             {marked ? 'Marked ✓' : marking ? 'Marking...' : 'Mark as Reminded'}
           </button>
         </div>
@@ -406,7 +406,7 @@ function RowMenu({
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-8 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-20 w-44">
+          <div className="absolute right-0 top-8 bg-white rounded-xl shadow-xl ring-1 ring-gray-900/5 p-1 z-20 w-48 animate-scale-in origin-top-right">
             {[
               { label: 'Record Payment', action: onRecordPayment },
               { label: 'Change Plan', action: onChangePlan },
@@ -415,7 +415,7 @@ function RowMenu({
             ].map(({ label, action }) => (
               <button key={label}
                 onClick={() => { setOpen(false); action(); }}
-                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                className="w-full text-left px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
                 {label}
               </button>
             ))}
@@ -455,17 +455,17 @@ function ReminderSettings() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl border border-[#EEF2FF] p-6" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
+    <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6">
       <div className="flex items-center gap-2 mb-4">
         <Clock size={18} className="text-blue-500" />
-        <h2 className="text-base font-bold text-slate-900">Reminder Schedule</h2>
+        <h2 className="text-base font-semibold tracking-tight text-gray-900">Reminder Schedule</h2>
       </div>
       <div>
         {rows.map(({ key, label, desc }) => (
           <div key={key} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
             <div className="flex-1 pr-4">
-              <p className="text-sm font-medium text-slate-700">{label}</p>
-              <p className="text-xs text-slate-400 mt-0.5">{desc}</p>
+              <p className="text-sm font-medium text-gray-700">{label}</p>
+              <p className="text-xs text-gray-400 mt-0.5">{desc}</p>
             </div>
             <button
               onClick={() => toggle(key)}
@@ -480,7 +480,7 @@ function ReminderSettings() {
           </div>
         ))}
       </div>
-      <p className="text-xs text-slate-400 mt-4">Reminders are sent manually via WhatsApp. Automation coming soon.</p>
+      <p className="text-xs text-gray-400 mt-4">Reminders are sent manually via WhatsApp. Automation coming soon.</p>
     </div>
   );
 }
@@ -566,12 +566,12 @@ export default function SubscriptionsPage() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Subscriptions</h1>
-          <p className="text-sm text-gray-400 mt-1">Manage society plans and payments</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">Subscriptions</h1>
+          <p className="text-sm text-gray-500 mt-1">Manage society plans and payments</p>
         </div>
         <div className="flex items-center gap-3">
           <button onClick={() => { setLoading(true); fetchData(); }}
-            className="p-2.5 border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50">
+            className="p-2.5 border border-gray-200 bg-white shadow-xs rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900">
             <RefreshCw size={16} />
           </button>
           <button onClick={() => openPayment()}
@@ -583,7 +583,7 @@ export default function SubscriptionsPage() {
 
       {/* Summary Cards */}
       {loading ? (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="bg-white rounded-2xl p-5 border border-gray-100">
               <div className="skeleton h-10 w-10 mb-4" style={{ borderRadius: '12px' }} />
@@ -593,47 +593,47 @@ export default function SubscriptionsPage() {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-4">
-          <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white rounded-2xl p-5 border border-gray-200/70 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
-                <TrendingUp size={20} className="text-green-600" />
+              <div className="w-10 h-10 bg-emerald-50 ring-1 ring-inset ring-emerald-100 rounded-xl flex items-center justify-center">
+                <TrendingUp size={20} className="text-emerald-600" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">₹{summary?.monthlyRevenue?.toLocaleString('en-IN')}</p>
+            <p className="text-2xl font-semibold tracking-tight tabular-nums text-gray-900">₹{summary?.monthlyRevenue?.toLocaleString('en-IN')}</p>
             <p className="text-sm text-gray-500 mt-0.5">Monthly Recurring Revenue</p>
             <p className="text-xs text-gray-400 mt-1">₹{((summary?.annualRevenue ?? 0) / 100000).toFixed(1)}L annual run rate</p>
           </div>
 
-          <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-2xl p-5 border border-gray-200/70 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center">
-                <CheckCircle size={20} className="text-green-600" />
+              <div className="w-10 h-10 bg-emerald-50 ring-1 ring-inset ring-emerald-100 rounded-xl flex items-center justify-center">
+                <CheckCircle size={20} className="text-emerald-600" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{summary?.totalActive}</p>
+            <p className="text-2xl font-semibold tracking-tight tabular-nums text-gray-900">{summary?.totalActive}</p>
             <p className="text-sm text-gray-500 mt-0.5">Active Subscriptions</p>
             <p className="text-xs text-gray-400 mt-1">Paying societies</p>
           </div>
 
           <div className={`bg-white rounded-2xl p-5 border shadow-sm ${(summary?.totalExpiring30 ?? 0) > 0 ? 'border-orange-200' : 'border-gray-100'}`}>
             <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-orange-50 ring-1 ring-inset ring-orange-100 rounded-xl flex items-center justify-center">
                 <AlertTriangle size={20} className="text-orange-500" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{summary?.totalExpiring30}</p>
+            <p className="text-2xl font-semibold tracking-tight tabular-nums text-gray-900">{summary?.totalExpiring30}</p>
             <p className="text-sm text-gray-500 mt-0.5">Expiring in 30 days</p>
             <p className="text-xs text-orange-400 mt-1">{(summary?.totalExpiring30 ?? 0) > 0 ? 'Needs attention ⚠️' : 'All good'}</p>
           </div>
 
           <div className={`bg-white rounded-2xl p-5 border shadow-sm ${(summary?.totalExpired ?? 0) > 0 ? 'border-red-200' : 'border-gray-100'}`}>
             <div className="flex items-center justify-between mb-3">
-              <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-red-50 ring-1 ring-inset ring-red-100 rounded-xl flex items-center justify-center">
                 <XCircle size={20} className="text-red-500" />
               </div>
             </div>
-            <p className="text-2xl font-bold text-gray-900">{summary?.totalExpired}</p>
+            <p className="text-2xl font-semibold tracking-tight tabular-nums text-gray-900">{summary?.totalExpired}</p>
             <p className="text-sm text-gray-500 mt-0.5">Expired</p>
             <p className="text-xs text-red-400 mt-1">{(summary?.totalExpired ?? 0) > 0 ? 'Renewal required' : 'None expired'}</p>
           </div>
@@ -643,10 +643,10 @@ export default function SubscriptionsPage() {
       {/* Expiry Timeline */}
       {!loading && (thisMonth.length > 0 || nextMonth.length > 0 || in3Mon.length > 0) && (
         <div>
-          <h2 className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+          <h2 className="text-base font-semibold tracking-tight text-gray-900 mb-3 flex items-center gap-2">
             <Calendar size={16} className="text-blue-500" /> Upcoming Renewals
           </h2>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               { label: 'This Month', items: thisMonth, color: 'border-red-200 bg-red-50/50', badge: 'text-red-600 bg-red-100' },
               { label: 'Next Month', items: nextMonth, color: 'border-orange-200 bg-orange-50/50', badge: 'text-orange-600 bg-orange-100' },
@@ -696,7 +696,7 @@ export default function SubscriptionsPage() {
       </div>
 
       {/* Society Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-6 space-y-3">
             {[1, 2, 3, 4, 5].map(i => (
@@ -717,7 +717,7 @@ export default function SubscriptionsPage() {
         ) : (
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-100 bg-gray-50">
+              <tr className="border-b border-gray-200/70 bg-gray-50/80">
                 <th className="text-left text-xs font-medium text-gray-400 px-5 py-3">Society</th>
                 <th className="text-left text-xs font-medium text-gray-400 px-4 py-3">Plan</th>
                 <th className="text-right text-xs font-medium text-gray-400 px-4 py-3">Amount</th>
@@ -732,7 +732,7 @@ export default function SubscriptionsPage() {
               {filtered.map((s) => {
                 const dl = getDaysLeft(s.subscriptionEnd, s.daysLeft);
                 return (
-                  <tr key={s.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                  <tr key={s.id} className="border-b border-gray-100 hover:bg-blue-50/40 transition-colors">
                     <td className="px-5 py-3">
                       <p className="font-medium text-gray-900">{s.name}</p>
                       <p className="text-xs text-gray-400">{s.city}, {s.state}</p>
@@ -754,9 +754,9 @@ export default function SubscriptionsPage() {
                     </td>
                     <td className="px-4 py-3 text-center">
                       <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                        s.status === 'ACTIVE' ? 'bg-green-50 text-green-700' :
-                        s.status === 'EXPIRING' ? 'bg-orange-50 text-orange-700' :
-                        'bg-red-50 text-red-600'
+                        s.status === 'ACTIVE' ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15' :
+                        s.status === 'EXPIRING' ? 'bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/15' :
+                        'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/15'
                       }`}>
                         {s.status}
                       </span>

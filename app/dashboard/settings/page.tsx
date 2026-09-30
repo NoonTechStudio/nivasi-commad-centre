@@ -99,8 +99,8 @@ const SESSIONS = [
 
 function Card({ title, sub, children }: { title: string; sub?: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl border border-[#EEF2FF] p-6 mb-5" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
-      <h3 className="text-base font-bold text-gray-900">{title}</h3>
+    <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6 mb-5">
+      <h3 className="text-base font-semibold tracking-tight text-gray-900">{title}</h3>
       {sub && <p className="text-xs text-gray-400 mt-0.5 mb-4">{sub}</p>}
       {!sub && <div className="mb-4" />}
       {children}
@@ -246,7 +246,7 @@ function GeneralTab({ settings, setSettings, handleSave, saved }: {
                 </span>
               )}
               {apiStatus === 'online' && (
-                <span className="flex items-center gap-1.5 text-sm text-green-600 font-medium">
+                <span className="flex items-center gap-1.5 text-sm text-emerald-600 font-medium">
                   <span className="w-2 h-2 rounded-full bg-green-500" /> Online
                 </span>
               )}
@@ -262,7 +262,7 @@ function GeneralTab({ settings, setSettings, handleSave, saved }: {
             <div>
               <p className="text-sm font-medium text-gray-700">Database Status</p>
             </div>
-            <span className="flex items-center gap-1.5 text-sm text-green-600 font-medium">
+            <span className="flex items-center gap-1.5 text-sm text-emerald-600 font-medium">
               <span className="w-2 h-2 rounded-full bg-green-500" /> Connected
             </span>
           </div>
@@ -270,7 +270,7 @@ function GeneralTab({ settings, setSettings, handleSave, saved }: {
             <div>
               <p className="text-sm font-medium text-gray-700">Total API Calls Today</p>
             </div>
-            <span className="text-sm font-bold text-gray-900">1,247</span>
+            <span className="text-sm font-semibold text-gray-900">1,247</span>
           </div>
         </div>
       </Card>
@@ -344,8 +344,8 @@ function PlansTab() {
     indigo: 'border-indigo-200 bg-indigo-50/50',
   };
   const PLAN_BADGE: Record<string, string> = {
-    blue: 'bg-blue-100 text-blue-700',
-    purple: 'bg-purple-100 text-purple-700',
+    blue: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20',
+    purple: 'bg-purple-50 text-purple-700 ring-1 ring-inset ring-purple-600/20',
     indigo: 'bg-indigo-100 text-indigo-700',
   };
 
@@ -361,7 +361,7 @@ function PlansTab() {
                   <input
                     value={plan.name}
                     onChange={(e) => updatePlan(plan.id, 'name', e.target.value)}
-                    className="text-base font-bold text-gray-900 bg-transparent border-none outline-none w-full"
+                    className="text-base font-semibold tracking-tight text-gray-900 bg-transparent border-none outline-none w-full"
                   />
                   <input
                     value={plan.flatsLabel}
@@ -387,7 +387,7 @@ function PlansTab() {
                     value={plan.price}
                     onChange={(e) => updatePlan(plan.id, 'price', Number(e.target.value))}
                     type="number"
-                    className="text-xl font-bold text-gray-900 bg-transparent border-none outline-none w-20"
+                    className="text-xl font-semibold tracking-tight text-gray-900 bg-transparent border-none outline-none w-20"
                   />
                   <span className="text-xs text-gray-400">/month</span>
                 </div>
@@ -453,7 +453,7 @@ function PlansTab() {
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               <p className="text-sm font-medium text-gray-700">Discount Codes</p>
-              <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">Coming Soon</span>
+              <span className="text-xs bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20 px-2 py-0.5 rounded-full font-medium">Coming Soon</span>
             </div>
             <p className="text-xs text-gray-400">Create promotional codes to offer discounts on subscriptions</p>
           </div>
@@ -568,7 +568,7 @@ function NotificationsTab({ settings }: { settings: Settings }) {
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {TEMPLATE_VARS.map((v) => (
                   <button key={v} onClick={() => insertVar(key, ref, v)}
-                    className="text-xs px-2 py-1 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 font-mono transition-colors">
+                    className="text-xs px-2 py-1 bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/15 rounded-lg hover:bg-blue-100 font-mono transition-colors">
                     {v}
                   </button>
                 ))}
@@ -589,7 +589,7 @@ function NotificationsTab({ settings }: { settings: Settings }) {
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               <p className="text-sm font-medium text-gray-700">Email Notifications</p>
-              <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full font-medium">Coming Soon</span>
+              <span className="text-xs bg-yellow-50 text-yellow-700 ring-1 ring-inset ring-yellow-600/20 px-2 py-0.5 rounded-full font-medium">Coming Soon</span>
             </div>
             <p className="text-xs text-gray-400">Automated email reminders will be available in a future update</p>
           </div>
@@ -631,12 +631,12 @@ function AccountTab({ user }: { user: { name?: string; role?: string; phone?: st
       <Card title="Profile" sub="Your administrator account information">
         <div className="flex items-center gap-4 mb-5">
           <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-            <span className="text-white text-2xl font-bold">{(profile.name || 'A').charAt(0).toUpperCase()}</span>
+            <span className="text-white text-2xl font-semibold tracking-tight tabular-nums">{(profile.name || 'A').charAt(0).toUpperCase()}</span>
           </div>
           <div>
             <p className="font-bold text-gray-900">{profile.name || 'Admin'}</p>
             <p className="text-sm text-gray-400">{maskedPhone}</p>
-            <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium mt-1 inline-block">
+            <span className="text-xs bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/15 px-2 py-0.5 rounded-full font-medium mt-1 inline-block">
               Super Administrator
             </span>
           </div>
@@ -717,10 +717,10 @@ function SecurityTab({ user }: { user: { name?: string; phone?: string } | null 
     <div>
       <Card title="Authentication" sub="Login method for your account">
         <div className="bg-green-50 border border-green-100 rounded-xl p-4 flex items-start gap-3">
-          <Check size={18} className="text-green-600 flex-shrink-0 mt-0.5" />
+          <Check size={18} className="text-emerald-600 flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-medium text-green-800">OTP Authentication Active</p>
-            <p className="text-xs text-green-600 mt-0.5">
+            <p className="text-xs text-emerald-600 mt-0.5">
               Your account is secured with OTP-based authentication. No password required.
               OTP is sent to {maskedPhone}.
             </p>
@@ -732,7 +732,7 @@ function SecurityTab({ user }: { user: { name?: string; phone?: string } | null 
               <p className="text-sm font-medium text-gray-700">Two-Factor Authentication</p>
               <p className="text-xs text-gray-400 mt-0.5">OTP via SMS is your second factor</p>
             </div>
-            <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-full font-medium flex items-center gap-1">
+            <span className="text-xs bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15 px-2 py-1 rounded-full font-medium flex items-center gap-1">
               <Check size={11} /> Enabled
             </span>
           </div>
@@ -747,7 +747,7 @@ function SecurityTab({ user }: { user: { name?: string; phone?: string } | null 
               <div>
                 <div className="flex items-center gap-2">
                   <p className="text-sm font-medium text-gray-800">{session.device}</p>
-                  {session.current && <span className="text-xs bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-medium">Current</span>}
+                  {session.current && <span className="text-xs bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20 px-1.5 py-0.5 rounded font-medium">Current</span>}
                 </div>
                 <p className="text-xs text-gray-400 mt-0.5">{session.location} · {session.time}</p>
               </div>
@@ -776,7 +776,7 @@ function SecurityTab({ user }: { user: { name?: string; phone?: string } | null 
           </thead>
           <tbody>
             {ACCESS_LOG.map((log, i) => (
-              <tr key={i} className="border-b border-gray-50 last:border-0">
+              <tr key={i} className="border-b border-gray-100 last:border-0">
                 <td className="py-2.5 text-xs text-gray-400 font-mono whitespace-nowrap pr-4">{log.time}</td>
                 <td className="py-2.5 text-sm font-medium text-gray-800 pr-4">{log.action}</td>
                 <td className="py-2.5 text-xs text-gray-500">{log.detail}</td>
@@ -834,14 +834,14 @@ export default function SettingsPage() {
     <div className="flex gap-6 items-start">
       {/* Left Tab List */}
       <div className="w-56 flex-shrink-0">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm overflow-hidden">
           {TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`w-full flex items-center gap-3 px-4 py-3.5 text-sm font-medium transition-colors border-b border-gray-50 last:border-0 ${
                 activeTab === tab.id
-                  ? 'bg-blue-50 text-blue-700 border-l-[3px] border-l-blue-600'
+                  ? 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/15 border-l-[3px] border-l-blue-600'
                   : 'text-gray-600 hover:bg-gray-50 border-l-[3px] border-l-transparent'
               }`}
             >

@@ -125,12 +125,12 @@ function AddSocietyModal({ onClose, onSuccess }: { onClose: () => void; onSucces
   const stepIndex = step === 'society' ? 0 : step === 'wing' ? 1 : 2;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div className="modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-lg max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <div>
-            <h2 className="text-lg font-bold text-gray-900">
+            <h2 className="text-lg font-semibold tracking-tight text-gray-900">
               {step === 'society' ? 'Add New Society' : step === 'wing' ? 'Add First Wing' : 'Setup Complete'}
             </h2>
             <div className="flex items-center gap-2 mt-2">
@@ -215,7 +215,7 @@ function AddSocietyModal({ onClose, onSuccess }: { onClose: () => void; onSucces
               {error && <p className="text-sm text-red-500">{error}</p>}
               <div className="flex gap-3 pt-2">
                 <button onClick={onClose}
-                  className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+                  className="flex-1 py-2.5 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
                   Cancel
                 </button>
                 <button onClick={handleCreateSociety} disabled={submitting}
@@ -287,9 +287,9 @@ function AddSocietyModal({ onClose, onSuccess }: { onClose: () => void; onSucces
           {step === 'success' && createdSociety && (
             <div className="text-center py-4">
               <div className="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <CheckCircle size={32} className="text-green-600" />
+                <CheckCircle size={32} className="text-emerald-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-1">{createdSociety.name} is ready!</h3>
+              <h3 className="text-xl font-semibold tracking-tight text-gray-900 mb-1">{createdSociety.name} is ready!</h3>
               <p className="text-sm text-gray-400 mb-6">Your new society has been set up</p>
               <div className="bg-gray-50 rounded-2xl p-4 text-left space-y-3 mb-6">
                 <div className="flex justify-between text-sm">
@@ -327,7 +327,7 @@ function AddSocietyModal({ onClose, onSuccess }: { onClose: () => void; onSucces
               <div className="flex gap-3">
                 <button
                   onClick={() => { onClose(); setForm({ name: '', address: '', city: '', state: 'Gujarat', pinCode: '' }); setWingForm({ name: '', floors: '', flatsPerFloor: '', secretaryName: '', secretaryPhone: '' }); setStep('society'); setCreatedSociety(null); setCreatedWing(null); }}
-                  className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+                  className="flex-1 py-2.5 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
                   Add Another
                 </button>
                 <button
@@ -364,14 +364,14 @@ function DeleteConfirmModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+    <div className="modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-md p-6">
         <div className="flex items-start gap-4 mb-5">
-          <div className="w-11 h-11 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
+          <div className="w-11 h-11 bg-red-50 ring-1 ring-inset ring-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
             <Trash2 size={20} className="text-red-600" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-gray-900">Delete {society.name}?</h2>
+            <h2 className="text-base font-semibold tracking-tight text-gray-900">Delete {society.name}?</h2>
             <p className="text-sm text-gray-500 mt-1">
               This will permanently delete the society and all its wings, flats, residents and data. This cannot be undone.
             </p>
@@ -379,7 +379,7 @@ function DeleteConfirmModal({
         </div>
         <div className="flex gap-3">
           <button onClick={onClose}
-            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+            className="flex-1 py-2.5 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
             Cancel
           </button>
           <button onClick={handleDelete} disabled={deleting}
@@ -415,40 +415,40 @@ function SocietyCard({ society, onDelete, onView }: {
   const totalFlats = society.wings?.reduce((sum, w) => sum + (w.flatsCount ?? 0), 0) ?? 0;
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-[#EEF2FF] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 relative cursor-pointer" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }} onClick={onView}>
+    <div className="group bg-white rounded-2xl p-5 border border-gray-200/70 shadow-sm hover:shadow-xl hover:shadow-gray-900/[0.06] hover:border-blue-200/70 hover:-translate-y-1 transition-all duration-300 relative cursor-pointer" onClick={onView}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-            <Building2 size={20} className="text-blue-600" />
+          <div className="w-11 h-11 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-600/25 group-hover:scale-105 transition-transform duration-300">
+            <Building2 size={19} className="text-white" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <h3 className="font-semibold text-slate-900 text-sm leading-tight">{society.name}</h3>
+              <h3 className="font-semibold text-gray-900 text-[15px] leading-tight tracking-tight">{society.name}</h3>
               {society.latitude && society.longitude && (
                 <MapPin size={12} className="text-blue-400 flex-shrink-0" />
               )}
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">{society.city}, {society.state}</p>
+            <p className="text-xs text-gray-500 mt-1">{society.city}, {society.state}</p>
           </div>
         </div>
         <div ref={menuRef} className="relative">
           <button
             onClick={e => { e.stopPropagation(); setMenuOpen(o => !o); }}
-            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors opacity-60 group-hover:opacity-100"
           >
             <MoreVertical size={16} className="text-gray-400" />
           </button>
           {menuOpen && (
-            <div className="absolute right-0 top-8 bg-white rounded-xl shadow-lg border border-gray-100 z-10 min-w-36 py-1">
+            <div className="absolute right-0 top-8 bg-white rounded-xl shadow-xl ring-1 ring-gray-900/5 z-10 min-w-40 p-1 animate-scale-in origin-top-right">
               <button
                 onClick={(e) => { e.stopPropagation(); onView(); setMenuOpen(false); }}
-                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-50"
               >
                 <Eye size={14} /> View Details
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); onDelete(); setMenuOpen(false); }}
-                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-600 hover:bg-red-50"
               >
                 <Trash2 size={14} /> Delete
               </button>
@@ -462,9 +462,9 @@ function SocietyCard({ society, onDelete, onView }: {
           { label: 'Wings', value: society.wings?.length ?? 0 },
           { label: 'Flats', value: totalFlats },
         ].map(s => (
-          <div key={s.label} className="text-center p-3 bg-slate-50 rounded-xl">
-            <p className="text-base font-bold text-slate-900">{s.value}</p>
-            <p className="text-xs text-slate-400">{s.label}</p>
+          <div key={s.label} className="px-3 py-2.5 bg-gray-50 ring-1 ring-inset ring-gray-100 rounded-xl">
+            <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">{s.label}</p>
+            <p className="text-lg font-semibold text-gray-900 tabular-nums">{s.value}</p>
           </div>
         ))}
       </div>
@@ -472,26 +472,26 @@ function SocietyCard({ society, onDelete, onView }: {
       {society.wings && society.wings.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-4">
           {society.wings.slice(0, 4).map(wing => (
-            <span key={wing.id} className="text-xs bg-blue-50 text-blue-700 font-medium px-2.5 py-1 rounded-full">
+            <span key={wing.id} className="text-xs bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/15 font-medium px-2.5 py-0.5 rounded-md">
               {wing.name}
             </span>
           ))}
           {society.wings.length > 4 && (
-            <span className="text-xs bg-gray-100 text-gray-500 font-medium px-2.5 py-1 rounded-full">
+            <span className="text-xs bg-gray-100 text-gray-500 font-medium px-2.5 py-0.5 rounded-md">
               +{society.wings.length - 4} more
             </span>
           )}
         </div>
       )}
 
-      <div className="flex items-center justify-between pt-3 border-t border-[#EEF2FF]">
+      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
         <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-          society.subscriptionStatus === 'EXPIRED' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'
+          society.subscriptionStatus === 'EXPIRED' ? 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/15' : 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15'
         }`}>
           {society.subscriptionStatus === 'EXPIRED' ? '● Expired' : '● Active'}
         </span>
         <button onClick={onView} className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-medium">
-          View Details <ChevronRight size={12} />
+          View Details <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
         </button>
       </div>
     </div>
@@ -532,12 +532,12 @@ export default function SocietiesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Societies</h1>
-          <p className="text-sm text-gray-400 mt-1">{societies.length} societies registered</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">Societies</h1>
+          <p className="text-sm text-gray-500 mt-1">{societies.length} societies registered</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20"
+          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 transition-all"
         >
           <Plus size={16} /> Add Society
         </button>
@@ -545,32 +545,32 @@ export default function SocietiesPage() {
 
       {/* Search */}
       <div className="relative">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder="Search by society name or city..."
-          className="w-full pl-9 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 bg-white"
+          className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 bg-white"
         />
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl p-4 border border-[#EEF2FF]" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
-          <p className="text-2xl font-bold text-slate-900">{societies.length}</p>
-          <p className="text-sm text-slate-400 mt-1">Total Societies</p>
+      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200/70 shadow-sm">
+          <p className="text-2xl font-semibold tracking-tight tabular-nums text-gray-900">{societies.length}</p>
+          <p className="text-sm text-gray-500 mt-1">Total Societies</p>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-[#EEF2FF]" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
-          <p className="text-2xl font-bold text-green-600">
+        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200/70 shadow-sm">
+          <p className="text-2xl font-semibold tracking-tight text-emerald-600 tabular-nums">
             {societies.filter(s => s.subscriptionStatus !== 'EXPIRED').length}
           </p>
-          <p className="text-sm text-slate-400 mt-1">Active</p>
+          <p className="text-sm text-gray-500 mt-1">Active</p>
         </div>
-        <div className="bg-white rounded-xl p-4 border border-[#EEF2FF]" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
-          <p className="text-2xl font-bold text-blue-600">
+        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200/70 shadow-sm">
+          <p className="text-2xl font-semibold tracking-tight text-blue-600 tabular-nums">
             {societies.reduce((sum, s) => sum + (s.wings?.length ?? 0), 0)}
           </p>
-          <p className="text-sm text-slate-400 mt-1">Total Wings</p>
+          <p className="text-sm text-gray-500 mt-1">Total Wings</p>
         </div>
       </div>
 
@@ -589,8 +589,10 @@ export default function SocietiesPage() {
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-2xl p-12 border border-gray-100 text-center">
-          <Building2 size={48} className="mx-auto mb-4 text-gray-200" />
+        <div className="bg-white rounded-2xl p-12 border border-dashed border-gray-300 text-center">
+          <div className="w-16 h-16 mx-auto mb-5 bg-gradient-to-b from-gray-50 to-gray-100 ring-1 ring-inset ring-gray-200/70 rounded-2xl flex items-center justify-center shadow-sm">
+            <Building2 size={26} className="text-gray-400" />
+          </div>
           <p className="text-gray-500 font-medium">No societies found</p>
           <p className="text-gray-400 text-sm mt-1">Add your first society to get started</p>
           <button

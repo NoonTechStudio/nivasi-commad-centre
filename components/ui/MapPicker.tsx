@@ -37,7 +37,7 @@ export default function MapPicker({
 
   return (
     <div className="space-y-3">
-      <div className="h-64 rounded-xl overflow-hidden border border-gray-200 relative">
+      <div className="h-64 rounded-xl overflow-hidden border border-gray-200 shadow-sm relative isolate">
         <LeafletMap
           position={position}
           onPositionChange={(lat, lng) => {
@@ -45,12 +45,12 @@ export default function MapPicker({
             reverseGeocode(lat, lng);
           }}
         />
-        <div className="absolute top-2 right-2 z-[1000] bg-white rounded-lg px-3 py-1.5 shadow text-xs text-gray-500">
+        <div className="absolute top-2 right-2 z-[1000] bg-white/90 backdrop-blur rounded-lg px-3 py-1.5 shadow-md ring-1 ring-gray-900/5 text-xs font-medium text-gray-600">
           Click map to pin location
         </div>
       </div>
       {address && (
-        <div className="flex items-start gap-2 bg-blue-50 rounded-xl p-3">
+        <div className="flex items-start gap-2 bg-blue-50 ring-1 ring-inset ring-blue-100 rounded-xl p-3">
           <MapPin size={14} className="text-blue-600 mt-0.5 flex-shrink-0" />
           <p className="text-xs text-blue-700 leading-relaxed">{address}</p>
         </div>

@@ -61,10 +61,10 @@ function SetSecretaryModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+    <div className="modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-md p-6">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-gray-900">
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">
             {replaceUser ? 'Replace Secretary' : 'Add Secretary'}
           </h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
@@ -100,7 +100,7 @@ function SetSecretaryModal({
         </div>
         <div className="flex gap-3 mt-6">
           <button onClick={onClose}
-            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+            className="flex-1 py-2.5 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
             Cancel
           </button>
           <button onClick={handleSubmit} disabled={submitting}
@@ -161,8 +161,8 @@ export default function WingDetailPage() {
         >
           <ArrowLeft size={16} /> {wing.society.name}
         </button>
-        <h1 className="text-2xl font-bold text-gray-900">{wing.name}</h1>
-        <p className="text-sm text-gray-400 mt-1">{wing.society.name}</p>
+        <h1 className="text-2xl font-semibold tracking-tight tabular-nums text-gray-900">{wing.name}</h1>
+        <p className="text-sm text-gray-500 mt-1">{wing.society.name}</p>
       </div>
 
       {/* Stat cards */}
@@ -173,15 +173,15 @@ export default function WingDetailPage() {
           { label: 'Vacant',      value: stats.vacantFlats },
           { label: 'Residents',   value: stats.totalResidents },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <p className="text-2xl font-bold text-gray-900">{s.value}</p>
-            <p className="text-sm text-gray-400 mt-1">{s.label}</p>
+          <div key={s.label} className="bg-white rounded-2xl p-4 border border-gray-200/70 shadow-sm">
+            <p className="text-2xl font-semibold tracking-tight tabular-nums text-gray-900">{s.value}</p>
+            <p className="text-sm text-gray-500 mt-1">{s.label}</p>
           </div>
         ))}
       </div>
 
       {/* Secretary section */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base font-semibold text-gray-900">
             Secretary ({wing.users.length}/2)
@@ -219,7 +219,7 @@ export default function WingDetailPage() {
                     <div className="flex items-center gap-2">
                       <p className="text-sm font-medium text-gray-900">{sec.name}</p>
                       {sec.isPrimary && (
-                        <span className="text-xs bg-blue-50 text-blue-600 font-medium px-1.5 py-0.5 rounded-full">Primary</span>
+                        <span className="text-xs bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/15 font-medium px-1.5 py-0.5 rounded-full">Primary</span>
                       )}
                     </div>
                     <p className="text-xs text-gray-400">{sec.phone}</p>
@@ -232,7 +232,7 @@ export default function WingDetailPage() {
                     className="p-2 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
                     title={`Call ${sec.name}`}
                   >
-                    <Phone size={14} className="text-green-600" />
+                    <Phone size={14} className="text-emerald-600" />
                   </a>
                   <button
                     onClick={() => { setReplaceTarget(sec); setShowSecretary(true); }}
@@ -248,7 +248,7 @@ export default function WingDetailPage() {
       </div>
 
       {/* Flats list */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
+      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm">
         <div className="p-5 border-b border-gray-100 flex items-center justify-between">
           <h2 className="text-base font-semibold text-gray-900">Flats ({wing.flats.length})</h2>
           <div className="flex items-center gap-4 text-xs text-gray-400">
@@ -275,7 +275,7 @@ export default function WingDetailPage() {
                 <div key={flat.id} className="flex items-center justify-between px-5 py-4 hover:bg-gray-50 transition-colors">
                   <div className="flex items-center gap-3">
                     <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-                      occupied ? 'bg-green-50 text-green-700' : 'bg-gray-50 text-gray-400'
+                      occupied ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15' : 'bg-gray-50 text-gray-400'
                     }`}>
                       {flat.number}
                     </div>
@@ -287,7 +287,7 @@ export default function WingDetailPage() {
                     </div>
                   </div>
                   <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                    occupied ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-400'
+                    occupied ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15' : 'bg-gray-100 text-gray-400'
                   }`}>
                     {occupied ? 'Occupied' : 'Vacant'}
                   </span>

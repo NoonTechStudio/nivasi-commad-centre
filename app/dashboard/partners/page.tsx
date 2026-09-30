@@ -33,9 +33,9 @@ const ROLE_LABELS: Record<string, string> = {
 };
 
 const ROLE_COLORS: Record<string, string> = {
-  STATE_ADMIN: 'bg-blue-100 text-blue-700',
-  CITY_ADMIN: 'bg-purple-100 text-purple-700',
-  AREA_PARTNER: 'bg-orange-100 text-orange-700',
+  STATE_ADMIN: 'bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/20',
+  CITY_ADMIN: 'bg-purple-50 text-purple-700 ring-1 ring-inset ring-purple-600/20',
+  AREA_PARTNER: 'bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/20',
   CUSTOM: 'bg-gray-100 text-gray-700',
 };
 
@@ -114,39 +114,39 @@ function AddPartnerModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+    <div className="modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-slate-900">Add Partner</h2>
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">Add Partner</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
             <X size={18} className="text-gray-500" />
           </button>
         </div>
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1">Full Name *</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Full Name *</label>
             <input value={form.name} onChange={set('name')} placeholder="Partner's full name"
               className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1">Phone * (+91)</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">Phone * (+91)</label>
               <input value={form.phone} onChange={set('phone')} placeholder="10 digits" maxLength={10}
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1">Email</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">Email</label>
               <input value={form.email} onChange={set('email')} placeholder="optional"
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1">Password *</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Password *</label>
             <input value={form.password} onChange={set('password')} type="password" placeholder="Portal login password"
               className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
           </div>
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1">Partner Level *</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Partner Level *</label>
             <select value={form.role} onChange={set('role')}
               className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 bg-white">
               <option value="STATE_ADMIN">State Admin — manages entire state</option>
@@ -157,19 +157,19 @@ function AddPartnerModal({
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1">Region Name *</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">Region Name *</label>
               <input value={form.region} onChange={set('region')} placeholder="e.g. Gujarat, Vadodara"
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1">Region Type</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">Region Type</label>
               <input value={form.regionType} onChange={set('regionType')} placeholder="State / City / Area"
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
             </div>
           </div>
           {filteredParents.length > 0 && (
             <div>
-              <label className="text-sm font-medium text-slate-700 block mb-1">Parent Partner</label>
+              <label className="text-sm font-medium text-gray-700 block mb-1">Parent Partner</label>
               <select value={form.parentId} onChange={set('parentId')}
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 bg-white">
                 <option value="">No parent (reports to Nivasi HQ)</option>
@@ -180,7 +180,7 @@ function AddPartnerModal({
             </div>
           )}
           <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1">Commission % (0–50)</label>
+            <label className="text-sm font-medium text-gray-700 block mb-1">Commission % (0–50)</label>
             <input value={form.commissionPct} onChange={set('commissionPct')} type="number" min="0" max="50"
               className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500" />
           </div>
@@ -188,11 +188,11 @@ function AddPartnerModal({
         </div>
         <div className="flex gap-3 mt-6">
           <button onClick={onClose}
-            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-slate-700 hover:bg-gray-50">
+            className="flex-1 py-2.5 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
             Cancel
           </button>
           <button onClick={handleSubmit} disabled={submitting}
-            className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 shadow-sm shadow-blue-600/20 active:scale-95 transition-transform">
+            className="flex-1 py-2.5 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 shadow-sm shadow-blue-600/20 transition-all">
             {submitting ? 'Adding...' : 'Add Partner'}
           </button>
         </div>
@@ -245,10 +245,10 @@ function CompactNode({
           </span>
         </div>
         <div className="flex-1 min-w-0">
-          <p className={`text-xs font-medium truncate ${isSelected ? 'text-blue-700' : 'text-slate-800'}`}>
+          <p className={`text-xs font-medium truncate ${isSelected ? 'text-blue-700' : 'text-gray-800'}`}>
             {node.name}
           </p>
-          <p className="text-xs text-slate-400 truncate">{node.region}</p>
+          <p className="text-xs text-gray-400 truncate">{node.region}</p>
         </div>
         <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium flex-shrink-0 ${ROLE_COLORS[node.role] ?? ROLE_COLORS.CUSTOM}`}>
           {node._count?.societies ?? 0}
@@ -280,26 +280,26 @@ function PartnerDetailPanel({
   return (
     <div className="flex-1 space-y-4">
       {/* Card 1 — Partner Info */}
-      <div className="bg-white rounded-2xl border border-[#EEF2FF] p-6" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
+      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6">
         <div className="flex items-start gap-4 mb-5">
           <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
             <span className="text-white text-xl font-bold">{partner.name.charAt(0).toUpperCase()}</span>
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-base font-bold text-slate-900">{partner.name}</h3>
+              <h3 className="text-base font-semibold tracking-tight text-gray-900">{partner.name}</h3>
               <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${ROLE_COLORS[partner.role] ?? ROLE_COLORS.CUSTOM}`}>
                 {ROLE_LABELS[partner.role] ?? partner.role}
               </span>
-              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${partner.isActive ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-600'}`}>
+              <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${partner.isActive ? 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15' : 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/15'}`}>
                 {partner.isActive ? 'Active' : 'Inactive'}
               </span>
             </div>
-            <p className="text-sm text-slate-500 mt-0.5">{partner.phone}{partner.email ? ` · ${partner.email}` : ''}</p>
+            <p className="text-sm text-gray-500 mt-0.5">{partner.phone}{partner.email ? ` · ${partner.email}` : ''}</p>
           </div>
           <button
             onClick={() => onNavigate(partner.id)}
-            className="flex items-center gap-1.5 border border-gray-200 text-slate-600 px-3 py-1.5 rounded-xl text-sm hover:bg-gray-50 flex-shrink-0"
+            className="flex items-center gap-1.5 border border-gray-200 text-gray-600 px-3 py-1.5 rounded-xl text-sm hover:bg-gray-50 flex-shrink-0"
           >
             <Edit2 size={13} /> Edit
           </button>
@@ -316,8 +316,8 @@ function PartnerDetailPanel({
             { label: 'Joined', value: new Date(partner.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) },
           ].map(({ label, value }) => (
             <div key={label} className="flex justify-between py-1.5 border-b border-gray-50 last:border-0">
-              <span className="text-slate-400">{label}</span>
-              <span className="font-medium text-slate-800">{value}</span>
+              <span className="text-gray-400">{label}</span>
+              <span className="font-medium text-gray-800">{value}</span>
             </div>
           ))}
         </div>
@@ -325,26 +325,26 @@ function PartnerDetailPanel({
         <div className="flex gap-3">
           <button
             onClick={() => onAddSubPartner(partner)}
-            className="flex-1 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 shadow-sm shadow-blue-600/20 active:scale-95 transition-transform"
+            className="flex-1 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 shadow-sm shadow-blue-600/20 transition-all"
           >
             + Add Sub-Partner
           </button>
-          <button className="flex-1 py-2 border border-gray-200 text-slate-700 rounded-xl text-sm font-medium hover:bg-gray-50">
+          <button className="flex-1 py-2 border border-gray-200 text-gray-700 rounded-xl text-sm font-medium hover:bg-gray-50">
             Assign Society
           </button>
         </div>
       </div>
 
       {/* Card 3 — Sub-Partners */}
-      <div className="bg-white rounded-2xl border border-[#EEF2FF] p-6" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
+      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-semibold text-slate-800">Direct Sub-Partners</h3>
-          <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">{subPartners.length}</span>
+          <h3 className="text-base font-semibold text-gray-800">Direct Sub-Partners</h3>
+          <span className="text-xs bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-600/15 px-2 py-0.5 rounded-full font-medium">{subPartners.length}</span>
         </div>
         {subPartners.length === 0 ? (
           <div className="py-6 text-center">
             <Users size={28} className="mx-auto mb-2 text-gray-200" />
-            <p className="text-sm text-slate-400">No sub-partners yet</p>
+            <p className="text-sm text-gray-400">No sub-partners yet</p>
           </div>
         ) : (
           <div className="space-y-2 mb-4">
@@ -358,46 +358,46 @@ function PartnerDetailPanel({
                   <span className="text-blue-700 text-xs font-bold">{sp.name.charAt(0)}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-800 truncate">{sp.name}</p>
-                  <p className="text-xs text-slate-400">{sp.region}</p>
+                  <p className="text-sm font-medium text-gray-800 truncate">{sp.name}</p>
+                  <p className="text-xs text-gray-400">{sp.region}</p>
                 </div>
                 <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${ROLE_COLORS[sp.role] ?? ROLE_COLORS.CUSTOM}`}>
                   {ROLE_LABELS[sp.role]}
                 </span>
-                <span className="text-xs text-slate-400">{sp._count?.societies ?? 0} soc</span>
+                <span className="text-xs text-gray-400">{sp._count?.societies ?? 0} soc</span>
               </div>
             ))}
           </div>
         )}
         <button
           onClick={() => onAddSubPartner(partner)}
-          className="w-full py-2 border border-dashed border-gray-200 text-slate-500 rounded-xl text-sm hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 transition-colors"
+          className="w-full py-2 border border-dashed border-gray-200 text-gray-500 rounded-xl text-sm hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 transition-colors"
         >
           + Add Sub-Partner under {partner.name}
         </button>
       </div>
 
       {/* Card 4 — Commission */}
-      <div className="bg-white rounded-2xl border border-[#EEF2FF] p-6" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
+      <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-6">
         <div className="flex items-center gap-2 mb-4">
           <Percent size={16} className="text-blue-500" />
-          <h3 className="text-base font-semibold text-slate-800">Commission</h3>
+          <h3 className="text-base font-semibold text-gray-800">Commission</h3>
         </div>
         <div className="space-y-3 mb-5">
           <div className="flex justify-between items-center">
-            <span className="text-sm text-slate-500">Commission rate</span>
-            <span className="text-2xl font-bold text-slate-900">{partner.commissionPct}%</span>
+            <span className="text-sm text-gray-500">Commission rate</span>
+            <span className="text-2xl font-semibold tracking-tight tabular-nums text-gray-900">{partner.commissionPct}%</span>
           </div>
           <div className="flex justify-between text-sm py-2 border-b border-gray-50">
-            <span className="text-slate-500">Est. monthly ({societyCount} societies)</span>
-            <span className="font-semibold text-slate-800">₹{commission.toLocaleString('en-IN')}</span>
+            <span className="text-gray-500">Est. monthly ({societyCount} societies)</span>
+            <span className="font-semibold text-gray-800">₹{commission.toLocaleString('en-IN')}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-slate-500">3-month estimate</span>
-            <span className="font-semibold text-slate-800">₹{est3Month.toLocaleString('en-IN')}</span>
+            <span className="text-gray-500">3-month estimate</span>
+            <span className="font-semibold text-gray-800">₹{est3Month.toLocaleString('en-IN')}</span>
           </div>
         </div>
-        <button className="w-full py-2.5 bg-green-600 text-white rounded-xl text-sm font-semibold hover:bg-green-700 active:scale-95 transition-transform">
+        <button className="w-full py-2.5 bg-green-600 text-white rounded-xl text-sm font-semibold hover:bg-green-700 transition-all">
           Pay Commission
         </button>
       </div>
@@ -466,12 +466,12 @@ export default function PartnersPage() {
       {/* Top Bar */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Partner Network</h1>
-          <p className="text-sm text-slate-400 mt-1">{partners.length} partners registered</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">Partner Network</h1>
+          <p className="text-sm text-gray-500 mt-1">{partners.length} partners registered</p>
         </div>
         <button
           onClick={() => { setSelectedParent(null); setShowAddModal(true); }}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 shadow-sm shadow-blue-600/20 active:scale-95 transition-transform"
+          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-blue-700 shadow-sm shadow-blue-600/20 transition-all"
         >
           <Plus size={16} /> Add Partner
         </button>
@@ -480,13 +480,13 @@ export default function PartnersPage() {
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: 'Total Partners', value: partners.length, color: 'text-slate-900' },
-          { label: 'Active', value: partners.filter(p => p.isActive).length, color: 'text-green-600' },
+          { label: 'Total Partners', value: partners.length, color: 'text-gray-900' },
+          { label: 'Active', value: partners.filter(p => p.isActive).length, color: 'text-emerald-600' },
           { label: 'Est. Commission', value: `₹${totalCommission.toLocaleString('en-IN')}`, color: 'text-blue-600' },
         ].map(s => (
-          <div key={s.label} className="bg-white rounded-xl p-4 border border-[#EEF2FF]" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
-            <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
-            <p className="text-sm text-slate-400 mt-1">{s.label}</p>
+          <div key={s.label} className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200/70 shadow-sm">
+            <p className={`text-2xl font-semibold tracking-tight tabular-nums ${s.color}`}>{s.value}</p>
+            <p className="text-sm text-gray-500 mt-1">{s.label}</p>
           </div>
         ))}
       </div>
@@ -494,12 +494,12 @@ export default function PartnersPage() {
       {/* Split Panel */}
       <div className="flex gap-5 items-start">
         {/* Left Panel — Compact Tree */}
-        <div className="w-72 flex-shrink-0 bg-white rounded-2xl border border-[#EEF2FF] overflow-hidden flex flex-col" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)', maxHeight: 'calc(100vh - 280px)' }}>
+        <div className="w-72 flex-shrink-0 bg-white rounded-2xl border border-gray-200/70 shadow-sm overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100vh - 280px)' }}>
           {/* Panel Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-100">
             <div>
-              <p className="text-sm font-bold text-slate-900">Partner Network</p>
-              <p className="text-xs text-slate-400">{partners.length} partners</p>
+              <p className="text-sm font-semibold text-gray-900">Partner Network</p>
+              <p className="text-xs text-gray-400">{partners.length} partners</p>
             </div>
             <button
               onClick={() => { setSelectedParent(null); setShowAddModal(true); }}
@@ -525,12 +525,12 @@ export default function PartnersPage() {
           {/* Nivasi HQ Root */}
           <div className="px-4 py-3 bg-gray-50 border-b border-gray-100">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-[#0F172A] rounded-lg flex items-center justify-center">
+              <div className="w-7 h-7 bg-gray-950 rounded-lg flex items-center justify-center">
                 <span className="text-white text-xs font-bold">N</span>
               </div>
               <div>
-                <p className="text-xs font-bold text-slate-900">Nivasi HQ</p>
-                <p className="text-xs text-slate-400">Super Admin</p>
+                <p className="text-xs font-bold text-gray-900">Nivasi HQ</p>
+                <p className="text-xs text-gray-400">Super Admin</p>
               </div>
             </div>
           </div>
@@ -544,7 +544,7 @@ export default function PartnersPage() {
             ) : filteredHierarchy.length === 0 ? (
               <div className="p-6 text-center">
                 <Users size={28} className="mx-auto mb-2 text-gray-200" />
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-gray-400">
                   {search ? 'No matches' : 'No partners yet'}
                 </p>
               </div>
@@ -565,9 +565,9 @@ export default function PartnersPage() {
         {/* Right Panel — Detail */}
         <div className="flex-1">
           {!selectedPartner ? (
-            <div className="bg-white rounded-2xl border border-[#EEF2FF] p-12 text-center" style={{ boxShadow: '0 1px 3px rgba(99,102,241,0.08)' }}>
+            <div className="bg-white rounded-2xl border border-gray-200/70 shadow-sm p-12 text-center">
               <Users size={40} className="mx-auto mb-3 text-gray-200" />
-              <p className="text-slate-400 text-sm">Select a partner from the list to view details</p>
+              <p className="text-gray-400 text-sm">Select a partner from the list to view details</p>
               <button
                 onClick={() => { setSelectedParent(null); setShowAddModal(true); }}
                 className="mt-4 text-sm text-blue-600 hover:underline"

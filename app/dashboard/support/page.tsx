@@ -74,8 +74,8 @@ function formatTimeAgo(dateStr: string) {
 
 function PriorityBadge({ priority }: { priority: string }) {
   const colors: Record<string, string> = {
-    high: 'bg-red-50 text-red-600',
-    medium: 'bg-orange-50 text-orange-600',
+    high: 'bg-red-50 text-red-700 ring-1 ring-inset ring-red-600/15',
+    medium: 'bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/15',
     low: 'bg-gray-100 text-gray-500',
   };
   return (
@@ -88,7 +88,7 @@ function PriorityBadge({ priority }: { priority: string }) {
 function StatusBadge({ status }: { status: string }) {
   return (
     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-      status === 'open' ? 'bg-orange-50 text-orange-600' : 'bg-green-50 text-green-700'
+      status === 'open' ? 'bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-600/15' : 'bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-600/15'
     }`}>
       {status === 'open' ? 'Open' : 'Resolved'}
     </span>
@@ -141,10 +141,10 @@ function AddTicketModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
+    <div className="modal-backdrop fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-md p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-gray-900">New Support Ticket</h2>
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">New Support Ticket</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
             <X size={18} className="text-gray-500" />
           </button>
@@ -213,7 +213,7 @@ function AddTicketModal({
 
         <div className="flex gap-3 mt-6">
           <button onClick={onClose}
-            className="flex-1 py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
+            className="flex-1 py-2.5 border border-gray-200 bg-white shadow-xs rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50">
             Cancel
           </button>
           <button onClick={handleAdd}
@@ -243,7 +243,7 @@ function TicketDetail({
       {/* Header */}
       <div className="p-5 border-b border-gray-100">
         <div className="flex items-start justify-between gap-3 mb-2">
-          <h2 className="text-lg font-bold text-gray-900">{ticket.societyName}</h2>
+          <h2 className="text-lg font-semibold tracking-tight text-gray-900">{ticket.societyName}</h2>
           <div className="flex items-center gap-2 flex-shrink-0">
             <PriorityBadge priority={ticket.priority} />
             <StatusBadge status={ticket.status} />
@@ -421,8 +421,8 @@ export default function SupportPage() {
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Support</h1>
-          <p className="text-sm text-gray-400">Manage secretary support requests</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">Support</h1>
+          <p className="text-sm text-gray-500 mt-1">Manage secretary support requests</p>
         </div>
         <button onClick={() => setShowAddModal(true)}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-blue-700 shadow-lg shadow-blue-600/20">
@@ -434,7 +434,7 @@ export default function SupportPage() {
       <div className="grid grid-cols-3 gap-4 mb-4">
         {[
           { label: 'Open Tickets', value: openCount, color: 'text-orange-600', bg: 'bg-orange-50', border: openCount > 0 ? 'border-orange-200' : 'border-gray-100' },
-          { label: 'Resolved Today', value: resolvedToday, color: 'text-green-600', bg: 'bg-green-50', border: 'border-gray-100' },
+          { label: 'Resolved Today', value: resolvedToday, color: 'text-emerald-600', bg: 'bg-green-50', border: 'border-gray-100' },
           { label: 'Avg Response', value: '< 2h', color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-gray-100' },
         ].map(({ label, value, color, bg, border }) => (
           <div key={label} className={`bg-white rounded-xl p-4 border ${border} shadow-sm flex items-center gap-3`}>
@@ -452,7 +452,7 @@ export default function SupportPage() {
       {/* Two-panel layout */}
       <div className="flex gap-4 flex-1 min-h-0">
         {/* Left: Ticket list */}
-        <div className="w-80 flex-shrink-0 bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col overflow-hidden">
+        <div className="w-80 flex-shrink-0 bg-white rounded-2xl border border-gray-200/70 shadow-sm flex flex-col overflow-hidden">
           {/* Search */}
           <div className="p-3 border-b border-gray-100">
             <div className="relative">
@@ -514,7 +514,7 @@ export default function SupportPage() {
         </div>
 
         {/* Right: Ticket detail */}
-        <div className="flex-1 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="flex-1 bg-white rounded-2xl border border-gray-200/70 shadow-sm overflow-hidden">
           {selectedTicket ? (
             <TicketDetail
               ticket={tickets.find((t) => t.id === selectedTicket.id) ?? selectedTicket}

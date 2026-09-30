@@ -64,17 +64,23 @@ function NavLink({
     <Link
       href={item.href}
       title={item.label}
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm font-medium ${
+      className={`group relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-[13.5px] font-medium ${
         collapsed ? 'justify-center' : ''
       } ${
         isActive
-          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'
-          : 'text-gray-400 hover:text-white hover:bg-white/10'
+          ? 'bg-gradient-to-r from-blue-600/90 to-blue-500/70 text-white shadow-lg shadow-blue-900/40 ring-1 ring-inset ring-white/10'
+          : 'text-gray-400 hover:text-white hover:bg-white/[0.06]'
       }`}
     >
-      <item.icon size={18} className="flex-shrink-0" />
+      {isActive && !collapsed && (
+        <span className="absolute -left-3 top-1/2 -translate-y-1/2 h-5 w-1 rounded-r-full bg-blue-400" />
+      )}
+      <item.icon
+        size={18}
+        strokeWidth={isActive ? 2.2 : 1.8}
+        className={`flex-shrink-0 ${isActive ? 'text-white' : 'text-gray-500 group-hover:text-gray-200'}`}
+      />
       {!collapsed && <span className="truncate">{item.label}</span>}
-      {!collapsed && isActive && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-white/60 flex-shrink-0" />}
     </Link>
   );
 }
@@ -125,37 +131,42 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100">
-          <Search size={18} className="text-gray-400 flex-shrink-0" />
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[12vh] px-4">
+      <div className="modal-backdrop absolute inset-0" onClick={onClose} />
+      <div className="relative bg-white rounded-2xl shadow-2xl ring-1 ring-gray-900/5 w-full max-w-xl overflow-hidden animate-scale-in">
+        <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-100">
+          <Search size={18} className="text-blue-500 flex-shrink-0" />
           <input
             ref={inputRef}
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search societies, partners..."
-            className="flex-1 text-sm text-gray-900 placeholder-gray-400 bg-transparent"
+            className="flex-1 text-[15px] text-gray-900 placeholder-gray-400 bg-transparent"
           />
-          <kbd className="text-xs text-gray-400 border border-gray-200 rounded px-1.5 py-0.5 font-mono">Esc</kbd>
+          <kbd className="text-[11px] text-gray-500 bg-gray-50 border border-gray-200 rounded-md px-1.5 py-0.5 font-mono shadow-xs">Esc</kbd>
         </div>
-        <div className="max-h-80 overflow-y-auto py-2">
+        <div className="max-h-96 overflow-y-auto p-2">
           {loading ? (
             <div className="flex justify-center py-6">
               <div className="w-5 h-5 animate-spin rounded-full border-2 border-gray-200 border-t-blue-600" />
             </div>
           ) : filtered.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-6">No results for &ldquo;{query}&rdquo;</p>
+            <div className="text-center py-10">
+              <div className="w-11 h-11 mx-auto mb-3 rounded-2xl bg-gray-50 flex items-center justify-center">
+                <Search size={18} className="text-gray-300" />
+              </div>
+              <p className="text-sm text-gray-500">No results for &ldquo;{query}&rdquo;</p>
+            </div>
           ) : (
             <>
               {societies.length > 0 && (
                 <>
-                  <p className="px-4 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <p className="px-3 pt-2 pb-1.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
                     Societies ({societies.length})
                   </p>
                   {societies.map(s => (
-                    <button key={s.id} onClick={() => go(s)} className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 text-left">
-                      <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <button key={s.id} onClick={() => go(s)} className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-blue-50/60 text-left">
+                      <div className="w-9 h-9 bg-blue-50 ring-1 ring-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
                         <Building2 size={14} className="text-blue-600" />
                       </div>
                       <div>
@@ -168,12 +179,12 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
               )}
               {partners.length > 0 && (
                 <>
-                  <p className="px-4 py-1.5 mt-1 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  <p className="px-3 pt-3 pb-1.5 text-[11px] font-semibold text-gray-400 uppercase tracking-wider">
                     Partners ({partners.length})
                   </p>
                   {partners.map(p => (
-                    <button key={p.id} onClick={() => go(p)} className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 text-left">
-                      <div className="w-8 h-8 bg-purple-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <button key={p.id} onClick={() => go(p)} className="group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-blue-50/60 text-left">
+                      <div className="w-9 h-9 bg-purple-50 ring-1 ring-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
                         <Users size={14} className="text-purple-600" />
                       </div>
                       <div>
@@ -187,10 +198,11 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
             </>
           )}
         </div>
-        <div className="px-4 py-2 border-t border-gray-100 bg-gray-50">
+        <div className="px-5 py-2.5 border-t border-gray-100 bg-gray-50/80 flex items-center justify-between">
           <p className="text-xs text-gray-400">
-            <kbd className="font-mono bg-white border border-gray-200 rounded px-1 py-0.5">Esc</kbd> to close
+            <kbd className="font-mono bg-white border border-gray-200 rounded-md px-1.5 py-0.5 shadow-xs">Esc</kbd> to close
           </p>
+          <p className="text-xs text-gray-400">Quick search</p>
         </div>
       </div>
     </div>
@@ -223,34 +235,34 @@ function ProfileDropdown({
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((x) => !x)}
-        className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center hover:ring-2 hover:ring-blue-300 transition-all"
+        className="w-9 h-9 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center ring-2 ring-white shadow-md hover:ring-blue-200 transition-all"
         title={user?.name ?? 'Admin'}
       >
         <span className="text-white text-xs font-bold">{user?.name?.charAt(0)?.toUpperCase() ?? 'A'}</span>
       </button>
 
       {open && (
-        <div className="absolute right-0 top-10 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-30 w-48 overflow-hidden">
-          <div className="px-4 py-2.5 border-b border-gray-100 mb-1">
+        <div className="absolute right-0 top-12 bg-white rounded-2xl shadow-xl ring-1 ring-gray-900/5 p-1.5 z-30 w-56 overflow-hidden animate-scale-in origin-top-right">
+          <div className="px-3 py-2.5 border-b border-gray-100 mb-1">
             <p className="text-sm font-semibold text-gray-900 truncate">{user?.name ?? 'Admin'}</p>
             <p className="text-xs text-gray-400">Super Administrator</p>
           </div>
           <button
             onClick={() => navigate('/dashboard/settings?tab=account')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >
             <User size={15} className="text-gray-400" /> My Account
           </button>
           <button
             onClick={() => navigate('/dashboard/settings')}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors"
           >
             <Settings size={15} className="text-gray-400" /> Settings
           </button>
           <div className="border-t border-gray-100 my-1" />
           <button
             onClick={() => { setOpen(false); onLogout(); }}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-red-600 hover:bg-red-50 transition-colors"
           >
             <LogOut size={15} /> Logout
           </button>
@@ -288,14 +300,14 @@ function HelpButton() {
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen((x) => !x)}
-        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+        className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
         title="Help & Support"
       >
         <HelpCircle size={18} />
       </button>
 
       {open && (
-        <div className="absolute right-0 top-10 bg-white rounded-2xl shadow-xl border border-gray-100 py-4 px-4 z-30 w-64">
+        <div className="absolute right-0 top-12 bg-white rounded-2xl shadow-xl ring-1 ring-gray-900/5 py-4 px-4 z-30 w-72 animate-scale-in origin-top-right">
           <div className="flex items-center justify-between mb-3">
             <p className="text-sm font-bold text-gray-900">Need Help?</p>
             <button onClick={() => setOpen(false)} className="text-gray-300 hover:text-gray-500">
@@ -309,7 +321,7 @@ function HelpButton() {
               href={`https://wa.me/91${supportPhone}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl transition-colors"
+              className="flex items-center gap-3 p-3 bg-green-50 hover:bg-green-100 rounded-xl ring-1 ring-green-100 transition-colors"
             >
               <MessageCircle size={16} className="text-green-600 flex-shrink-0" />
               <div>
@@ -320,7 +332,7 @@ function HelpButton() {
 
             <a
               href={`mailto:${supportEmail}`}
-              className="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl transition-colors"
+              className="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-xl ring-1 ring-blue-100 transition-colors"
             >
               <Mail size={16} className="text-blue-600 flex-shrink-0" />
               <div>
@@ -414,26 +426,30 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   const sidebarW = collapsed ? 'w-16' : 'w-64';
-  const contentML = collapsed ? 'ml-16' : 'ml-64';
   const breadcrumbs = getBreadcrumbs(pathname);
 
   if (checking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto mb-4" />
-          <p className="text-gray-500">Loading Nivasi Command Centre...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center animate-fade-in">
+          <div className="relative w-14 h-14 mx-auto mb-5">
+            <div className="absolute inset-0 rounded-2xl bg-blue-500/20 animate-ping" />
+            <div className="relative w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/30">
+              <span className="text-white font-bold text-xl">N</span>
+            </div>
+          </div>
+          <p className="text-sm font-medium text-gray-500">Loading Nivasi Command Centre…</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F7FF]">
+    <div className="min-h-screen bg-background">
       {/* Mobile backdrop */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          className="fixed inset-0 bg-gray-950/50 backdrop-blur-sm z-30 lg:hidden animate-fade-in"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -443,33 +459,40 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Sidebar */}
       <aside
-        className={`no-print fixed left-0 top-0 h-screen bg-[#0F172A] flex flex-col z-20 transition-all duration-300 ${sidebarW} ${
+        className={`no-print fixed left-0 top-0 h-screen bg-gray-950 flex flex-col z-40 lg:z-20 transition-all duration-300 overflow-hidden ${sidebarW} ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
+        {/* Ambient glow */}
+        <div className="pointer-events-none absolute -top-24 -left-20 w-64 h-64 rounded-full bg-blue-600/20 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 -right-24 w-56 h-56 rounded-full bg-indigo-600/10 blur-3xl" />
+
         {/* Logo */}
-        <div className={`h-16 flex items-center border-b border-white/10 ${collapsed ? 'justify-center px-0' : 'px-6'}`}>
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-600/30">
-            <span className="text-white font-bold text-sm">N</span>
+        <div className={`relative h-16 flex items-center border-b border-white/[0.06] ${collapsed ? 'justify-center px-0' : 'px-5'}`}>
+          <div className="w-9 h-9 bg-gradient-to-br from-blue-400 via-blue-600 to-indigo-700 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-600/40 ring-1 ring-white/20">
+            <span className="text-white font-bold text-[15px]">N</span>
           </div>
           {!collapsed && (
-            <div className="ml-3">
-              <p className="text-white font-semibold text-sm">Nivasi</p>
-              <p className="text-blue-400 text-xs">Command Centre</p>
+            <div className="ml-3 leading-tight">
+              <p className="text-white font-semibold text-[15px] tracking-tight">Nivasi</p>
+              <p className="text-blue-300/80 text-[11px] font-medium uppercase tracking-[0.12em]">Command Centre</p>
             </div>
           )}
         </div>
 
         {/* Main nav */}
-        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+        <nav className="relative flex-1 px-3 py-5 space-y-1 overflow-y-auto">
+          {!collapsed && (
+            <p className="px-3 pb-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-gray-600">Menu</p>
+          )}
           {mainNavItems.map((item) => (
             <NavLink key={item.href} item={item} pathname={pathname} collapsed={collapsed} />
           ))}
         </nav>
 
         {/* Divider + Settings */}
-        <div className="px-3 pb-3">
-          <div className="border-t border-white/10 mb-3" />
+        <div className="relative px-3 pb-3">
+          <div className="border-t border-white/[0.06] mb-3" />
           {bottomNavItems.map((item) => (
             <NavLink key={item.href} item={item} pathname={pathname} collapsed={collapsed} />
           ))}
@@ -477,67 +500,67 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* User bar */}
         {!collapsed && (
-          <div className="p-3 border-t border-white/10">
+          <div className="relative px-3 pb-3">
             <div
-              className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/10 cursor-pointer"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/[0.04] ring-1 ring-inset ring-white/[0.06] hover:bg-white/[0.08] cursor-pointer"
               onClick={() => router.push('/dashboard/settings?tab=account')}
             >
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="relative w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-xs font-bold">{user?.name?.charAt(0)?.toUpperCase() ?? 'A'}</span>
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-gray-950" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-white text-xs font-medium truncate">{user?.name ?? 'Admin'}</p>
-                <p className="text-gray-500 text-xs">{user?.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Wing Admin'}</p>
+                <p className="text-white text-[13px] font-medium truncate">{user?.name ?? 'Admin'}</p>
+                <p className="text-gray-500 text-[11px]">{user?.role === 'SUPER_ADMIN' ? 'Super Admin' : 'Wing Admin'}</p>
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); handleLogout(); }}
-                className="text-gray-500 hover:text-red-400 transition-colors"
+                className="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
                 title="Logout"
               >
-                <LogOut size={16} />
+                <LogOut size={15} />
               </button>
             </div>
           </div>
         )}
 
         {/* Collapse toggle + version */}
-        <div className={`px-3 pb-3 ${collapsed ? 'flex flex-col items-center' : ''}`}>
+        <div className={`relative px-3 pb-3 ${collapsed ? 'flex flex-col items-center' : ''}`}>
           <button
             onClick={toggleCollapsed}
-            className="w-full flex items-center justify-center gap-2 p-2 rounded-xl text-gray-500 hover:text-white hover:bg-white/10 transition-colors text-xs"
+            className="hidden lg:flex w-full items-center justify-center gap-2 p-2 rounded-xl text-gray-500 hover:text-white hover:bg-white/[0.06] transition-colors text-xs font-medium"
             title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {collapsed ? <ChevronRight size={16} /> : <><ChevronLeft size={16} /><span>Collapse</span></>}
           </button>
-          {!collapsed && <p className="text-gray-600 text-xs text-center pb-1 mt-1">v1.0.0</p>}
+          {!collapsed && <p className="text-gray-700 text-[11px] text-center pb-1 mt-1">v1.0.0</p>}
         </div>
       </aside>
 
       {/* Header */}
       <header
-        className={`no-print fixed top-0 right-0 h-16 border-b border-[#EEF2FF] flex items-center justify-between px-4 z-10 transition-all duration-300 bg-gradient-to-r from-white to-blue-50/30 ${
-          scrolled ? 'shadow-md' : 'shadow-sm'
-        } lg:left-${collapsed ? '16' : '64'} left-0`}
-        style={{ left: `${collapsed ? 64 : 256}px` }}
+        className={`no-print fixed top-0 right-0 left-0 h-16 flex items-center justify-between px-4 sm:px-6 z-10 transition-all duration-300 bg-white/75 backdrop-blur-xl backdrop-saturate-150 border-b ${
+          scrolled ? 'border-gray-200/80 shadow-sm' : 'border-transparent'
+        } ${collapsed ? 'lg:left-16' : 'lg:left-64'}`}
       >
         <div className="flex items-center gap-3 min-w-0">
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen(x => !x)}
-            className="lg:hidden p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
+            className="lg:hidden p-2 -ml-1 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-xl"
           >
             <Menu size={18} />
           </button>
 
           {/* Breadcrumbs */}
-          <nav className="flex items-center gap-1 text-sm min-w-0">
+          <nav className="flex items-center gap-1.5 text-sm min-w-0">
             {breadcrumbs.map((crumb, i) => (
-              <span key={i} className="flex items-center gap-1 min-w-0">
-                {i > 0 && <span className="text-gray-300 flex-shrink-0">/</span>}
+              <span key={i} className="flex items-center gap-1.5 min-w-0">
+                {i > 0 && <ChevronRight size={14} className="text-gray-300 flex-shrink-0" />}
                 {i === breadcrumbs.length - 1 ? (
                   <span className="font-semibold text-gray-900 truncate">{crumb.label}</span>
                 ) : (
-                  <Link href={crumb.href} className="text-gray-400 hover:text-gray-600 truncate">
+                  <Link href={crumb.href} className="text-gray-500 hover:text-gray-900 truncate">
                     {crumb.label}
                   </Link>
                 )}
@@ -546,19 +569,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </nav>
         </div>
 
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-1.5 flex-shrink-0">
           {/* Search bar */}
           <button
             onClick={() => setSearchOpen(true)}
-            className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm text-gray-400 transition-colors"
+            className="hidden sm:flex items-center gap-2 pl-3 pr-2 py-1.5 w-56 bg-gray-100/80 hover:bg-gray-100 ring-1 ring-inset ring-gray-200/70 rounded-xl text-sm text-gray-400 transition-colors mr-1"
           >
             <Search size={14} />
-            <span>Search...</span>
-            <kbd className="text-xs border border-gray-300 rounded px-1 font-mono ml-1">⌘K</kbd>
+            <span className="flex-1 text-left">Search…</span>
+            <kbd className="text-[11px] text-gray-500 bg-white border border-gray-200 rounded-md px-1.5 font-mono shadow-xs">⌘K</kbd>
           </button>
           <button
             onClick={() => setSearchOpen(true)}
-            className="sm:hidden p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg"
+            className="sm:hidden p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-xl"
           >
             <Search size={18} />
           </button>
@@ -567,15 +590,17 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
           <Link
             href="/dashboard/notifications"
-            className="relative p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+            className="relative p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
           >
             <Bell size={18} />
             {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 min-w-[16px] h-4 bg-red-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold px-0.5">
+              <span className="absolute top-1 right-1 min-w-[16px] h-4 bg-red-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold px-1 ring-2 ring-white">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
           </Link>
+
+          <div className="w-px h-6 bg-gray-200 mx-1.5" />
 
           <ProfileDropdown user={user} onLogout={handleLogout} />
         </div>
@@ -583,13 +608,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main content */}
       <main
-        className={`mt-16 min-h-screen bg-[#F5F7FF] p-6 transition-all duration-300 hidden lg:block ${contentML}`}
+        className={`pt-16 min-h-screen transition-all duration-300 ${collapsed ? 'lg:ml-16' : 'lg:ml-64'}`}
       >
-        {children}
-      </main>
-      {/* Mobile main (no margin offset) */}
-      <main className="mt-16 min-h-screen bg-[#F5F7FF] p-4 lg:hidden">
-        {children}
+        <div key={pathname} className="page-enter mx-auto max-w-[1600px] p-4 sm:p-6 lg:p-8">
+          {children}
+        </div>
       </main>
     </div>
   );
